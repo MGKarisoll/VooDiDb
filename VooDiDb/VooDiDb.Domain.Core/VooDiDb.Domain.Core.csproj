@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Audience.cs" />
     <Compile Include="Base\BaseEntity.cs" />
     <Compile Include="Base\IFullName.cs" />
     <Compile Include="Base\IName.cs" />
@@ -50,6 +51,7 @@
     <Compile Include="TypeOfOwnership.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserRolesEnum.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

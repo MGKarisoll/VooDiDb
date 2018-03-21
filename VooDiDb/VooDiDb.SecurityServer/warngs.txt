@@ -1,0 +1,1 @@
+2018-03-21 16:51:57.9347 VooDiDb.Infrastructure.Business.UserService.LogIn Warn { Message = User can not log in, Value = { Login = admin\admin } }

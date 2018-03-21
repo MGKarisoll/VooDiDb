@@ -1,0 +1,2 @@
+2018-03-21 16:39:35.0862 VooDiDb.Infrastructure.Business.UserService.LogIn Trace { Message = User logged in, Value = System.Data.Entity.DynamicProxies.User_2742D73350092AF9625CC306ECB1A8724FCE7220783328B8F092E32D43FAD427 }
+2018-03-21 16:41:39.8701 VooDiDb.Infrastructure.Business.UserService.LogIn Trace { Message = User logged in, Value = { Login = admin\admin } }

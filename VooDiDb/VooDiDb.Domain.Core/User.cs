@@ -10,7 +10,7 @@ namespace VooDiDb.Domain.Core
         public long DepartmentId { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
-        public int Role { get; set; }
+        public UserRolesEnum Role { get; set; }
 
         public virtual Post Post { get; set; }
         public virtual Department Department { get; set; }

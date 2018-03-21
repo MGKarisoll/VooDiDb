@@ -8,7 +8,7 @@ namespace VooDiDb.Domain.Core
         public string Name { get; set; }
         public string ManagerName { get; set; }
         public long TypeOfOwnershipId { get; set; }
-        public string LegalAdress { get; set; }
+        public string LegalAddress { get; set; }
         public string ManufacturersAddress { get; set; }
         public long ManufactureTypeId { get; set; }
         public string Description { get; set; }

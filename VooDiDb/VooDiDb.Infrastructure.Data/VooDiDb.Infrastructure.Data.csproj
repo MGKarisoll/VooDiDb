@@ -48,17 +48,54 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppDbContext.cs" />
-    <Compile Include="Migrations\201803181935549_FirstInit.cs" />
-    <Compile Include="Migrations\201803181935549_FirstInit.Designer.cs">
-      <DependentUpon>201803181935549_FirstInit.cs</DependentUpon>
+    <Compile Include="Context\AppDbContext.cs" />
+    <Compile Include="Repository.cs" />
+    <Compile Include="Migrations\201803190702018_FirstInit.cs" />
+    <Compile Include="Migrations\201803190702018_FirstInit.Designer.cs">
+      <DependentUpon>201803190702018_FirstInit.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201803181942499_All_PK_Changed.cs" />
-    <Compile Include="Migrations\201803181942499_All_PK_Changed.Designer.cs">
-      <DependentUpon>201803181942499_All_PK_Changed.cs</DependentUpon>
+    <Compile Include="Migrations\201803191129032_Manufacturer_Address_Column_name_changed.cs" />
+    <Compile Include="Migrations\201803191129032_Manufacturer_Address_Column_name_changed.Designer.cs">
+      <DependentUpon>201803191129032_Manufacturer_Address_Column_name_changed.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803191225129_All_entities_IsDeleted_property_added.cs" />
+    <Compile Include="Migrations\201803191225129_All_entities_IsDeleted_property_added.Designer.cs">
+      <DependentUpon>201803191225129_All_entities_IsDeleted_property_added.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803200741339_AudienceAdded.cs" />
+    <Compile Include="Migrations\201803200741339_AudienceAdded.Designer.cs">
+      <DependentUpon>201803200741339_AudienceAdded.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803210703117_Entities_SortOrder_Property_Added.cs" />
+    <Compile Include="Migrations\201803210703117_Entities_SortOrder_Property_Added.Designer.cs">
+      <DependentUpon>201803210703117_Entities_SortOrder_Property_Added.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803210738358_User_Role_type_changed.cs" />
+    <Compile Include="Migrations\201803210738358_User_Role_type_changed.Designer.cs">
+      <DependentUpon>201803210738358_User_Role_type_changed.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803210831407_AudienceColumns_changed.cs" />
+    <Compile Include="Migrations\201803210831407_AudienceColumns_changed.Designer.cs">
+      <DependentUpon>201803210831407_AudienceColumns_changed.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\MessageResources.ru.Designer.cs">
+      <DependentUpon>MessageResources.ru.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\MessageResources.en.Designer.cs">
+      <DependentUpon>MessageResources.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\MessageResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MessageResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Scheme\AudienceSchema.cs" />
     <Compile Include="Scheme\Base\BaseEntitySchema.cs" />
     <Compile Include="Scheme\DepartmentSchema.cs" />
     <Compile Include="Scheme\InstitutuionSchema.cs" />
@@ -67,7 +104,7 @@
     <Compile Include="Scheme\PostSchema.cs" />
     <Compile Include="Scheme\TypeOfOwnershipSchema.cs" />
     <Compile Include="Scheme\UserSchema.cs" />
-    <Compile Include="SeedConfiguration.cs" />
+    <Compile Include="Configuration\SeedConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -78,16 +115,51 @@
       <Project>{691234A2-CBD1-4F48-94D9-712641090F4B}</Project>
       <Name>VooDiDb.Domain.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\VooDiDb.Domain.Interfaces\VooDiDb.Domain.Interfaces.csproj">
+      <Project>{67610892-A467-48C9-873D-98C9812851B4}</Project>
+      <Name>VooDiDb.Domain.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VooDiDb.Utilites.Util\VooDiDb.Utilites.Util.csproj">
+      <Project>{51C5EC39-D3B8-48B8-BC34-06CD6619F477}</Project>
+      <Name>VooDiDb.Utilites.Util</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201803181935549_FirstInit.resx">
-      <DependentUpon>201803181935549_FirstInit.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201803190702018_FirstInit.resx">
+      <DependentUpon>201803190702018_FirstInit.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803181942499_All_PK_Changed.resx">
-      <DependentUpon>201803181942499_All_PK_Changed.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201803191129032_Manufacturer_Address_Column_name_changed.resx">
+      <DependentUpon>201803191129032_Manufacturer_Address_Column_name_changed.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803191225129_All_entities_IsDeleted_property_added.resx">
+      <DependentUpon>201803191225129_All_entities_IsDeleted_property_added.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803200741339_AudienceAdded.resx">
+      <DependentUpon>201803200741339_AudienceAdded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803210703117_Entities_SortOrder_Property_Added.resx">
+      <DependentUpon>201803210703117_Entities_SortOrder_Property_Added.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803210738358_User_Role_type_changed.resx">
+      <DependentUpon>201803210738358_User_Role_type_changed.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803210831407_AudienceColumns_changed.resx">
+      <DependentUpon>201803210831407_AudienceColumns_changed.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\MessageResources.ru.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>MessageResources.ru.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\MessageResources.en.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>MessageResources.en.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\MessageResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>MessageResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
