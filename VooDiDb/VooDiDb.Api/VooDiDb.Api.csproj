@@ -8,12 +8,12 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{0F170601-53B7-4C09-A8FD-ED529B4E9C6D}</ProjectGuid>
+    <ProjectGuid>{27DB0287-C7B0-408A-B9B8-E15E2CFA6186}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>VooDiDb.SecurityServer</RootNamespace>
-    <AssemblyName>VooDiDb.SecurityServer</AssemblyName>
+    <RootNamespace>VooDiDb.Api</RootNamespace>
+    <AssemblyName>VooDiDb.Api</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
@@ -50,12 +50,6 @@
     <Reference Include="Castle.Windsor, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <HintPath>..\packages\Castle.Windsor.4.1.0\lib\net45\Castle.Windsor.dll</HintPath>
     </Reference>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.8.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
@@ -71,15 +65,6 @@
     </Reference>
     <Reference Include="Microsoft.Owin.Cors, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.Cors.4.0.0\lib\net451\Microsoft.Owin.Cors.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Host.HttpListener, Version=2.0.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.Host.HttpListener.2.0.2\lib\net45\Microsoft.Owin.Host.HttpListener.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.3.0.0\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Hosting, Version=2.0.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.Hosting.2.0.2\lib\net45\Microsoft.Owin.Hosting.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Owin.Security, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.Security.4.0.0\lib\net451\Microsoft.Owin.Security.dll</HintPath>
@@ -140,17 +125,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\AudienceController.cs" />
-    <Compile Include="Extensions\ValidationServiceExtension.cs" />
-    <Compile Include="WindsorConfig\AppWindsorInstaller.cs" />
-    <Compile Include="WindsorConfig\WindsorDependencyResolver.cs" />
-    <Compile Include="WindsorConfig\WindsorDependencyScope.cs" />
-    <Compile Include="WindsorConfig\WindsorHttpControllerActivator.cs" />
+    <Compile Include="Controllers\ProtectedController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="OAuth\CustomJwtFormat.cs" />
-    <Compile Include="OAuth\CustomOAuthProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -165,38 +143,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\Base\" />
     <Folder Include="Models\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\VooDiDb.Domain.Core\VooDiDb.Domain.Core.csproj">
-      <Project>{691234A2-CBD1-4F48-94D9-712641090F4B}</Project>
-      <Name>VooDiDb.Domain.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\VooDiDb.Domain.Interfaces\VooDiDb.Domain.Interfaces.csproj">
-      <Project>{67610892-A467-48C9-873D-98C9812851B4}</Project>
-      <Name>VooDiDb.Domain.Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\VooDiDb.Infrastructure.Business\VooDiDb.Infrastructure.Business.csproj">
-      <Project>{D7BF441E-B109-4F20-91D2-4712A3FC0F40}</Project>
-      <Name>VooDiDb.Infrastructure.Business</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\VooDiDb.Infrastructure.Data\VooDiDb.Infrastructure.Data.csproj">
-      <Project>{D703BCCE-B6E0-4E34-A5E4-B8904E04A8ED}</Project>
-      <Name>VooDiDb.Infrastructure.Data</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\VooDiDb.Services.Core\VooDiDb.Services.Core.csproj">
-      <Project>{6204A9FB-EE75-4CC5-A994-98D483F218E5}</Project>
-      <Name>VooDiDb.Services.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\VooDiDb.Services.Interfaces\VooDiDb.Services.Interfaces.csproj">
-      <Project>{6093BC47-DF4C-4A6C-AD49-2350B406E0C9}</Project>
-      <Name>VooDiDb.Services.Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\VooDiDb.Utilites.Util\VooDiDb.Utilites.Util.csproj">
-      <Project>{51c5ec39-d3b8-48b8-bc34-06cd6619f477}</Project>
-      <Name>VooDiDb.Utilites.Util</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -211,9 +158,9 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>7507</DevelopmentServerPort>
+          <DevelopmentServerPort>12979</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:7507/</IISUrl>
+          <IISUrl>http://localhost:12979/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

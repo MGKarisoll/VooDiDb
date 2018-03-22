@@ -7,31 +7,24 @@ using VooDiDb.SecurityServer.Extensions;
 using VooDiDb.Services.Core;
 using VooDiDb.Services.Interfaces;
 
-namespace VooDiDb.SecurityServer.Controllers
-{
+namespace VooDiDb.SecurityServer.Controllers {
     [RoutePrefix("api/audience")]
-    public class AudienceController : ApiController
-    {
+    public class AudienceController : ApiController {
         private readonly IAudienceService audienceService;
 
-        public AudienceController(IAudienceService audienceService)
-        {
+        public AudienceController(IAudienceService audienceService) {
             this.audienceService = audienceService;
         }
 
         [Route("")]
-        public HttpResponseMessage Post(AudienceDTO model)
-        {
-            audienceService.GetService(typeof(CreationAudienceValidationService), model, ModelState);
-            if (!ModelState.IsValid) return Request.CreateResponse(HttpStatusCode.BadRequest, ModelState);
+        public HttpResponseMessage Post(AudienceDTO model) {
+            this.audienceService.GetService(typeof(CreationAudienceValidationService), model, this.ModelState);
+            if(!this.ModelState.IsValid) return this.Request.CreateResponse(HttpStatusCode.BadRequest, this.ModelState);
 
-            try
-            {
-                return Request.CreateResponse(HttpStatusCode.OK, audienceService.AddAudience(model));
-            }
-            catch (Exception ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
+            try {
+                return this.Request.CreateResponse(HttpStatusCode.OK, this.audienceService.AddAudience(model));
+            } catch(Exception ex) {
+                return this.Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
     }

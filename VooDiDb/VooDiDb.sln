@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VooDiDb.Utilites.Util", "Vo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VooDiDb.SecurityServer", "VooDiDb.SecurityServer\VooDiDb.SecurityServer.csproj", "{0F170601-53B7-4C09-A8FD-ED529B4E9C6D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VooDiDb.Api", "VooDiDb.Api\VooDiDb.Api.csproj", "{27DB0287-C7B0-408A-B9B8-E15E2CFA6186}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +67,10 @@ Global
 		{0F170601-53B7-4C09-A8FD-ED529B4E9C6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F170601-53B7-4C09-A8FD-ED529B4E9C6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F170601-53B7-4C09-A8FD-ED529B4E9C6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27DB0287-C7B0-408A-B9B8-E15E2CFA6186}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27DB0287-C7B0-408A-B9B8-E15E2CFA6186}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27DB0287-C7B0-408A-B9B8-E15E2CFA6186}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27DB0287-C7B0-408A-B9B8-E15E2CFA6186}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

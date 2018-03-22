@@ -1,0 +1,1 @@
+2018-03-22 10:38:43.7843 VooDiDb.Infrastructure.Business.UserService.LogIn Trace { Message = User logged in, Value = { Login = admin\admin } }

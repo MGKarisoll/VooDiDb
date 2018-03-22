@@ -6,21 +6,16 @@ using Microsoft.Owin;
 using Microsoft.Owin.Cors;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
-using VooDiDb.Domain.Core;
-using VooDiDb.Domain.Interfaces;
 using VooDiDb.SecurityServer;
 using VooDiDb.SecurityServer.OAuth;
 using VooDiDb.SecurityServer.WindsorConfig;
 using VooDiDb.Services.Interfaces;
 
-[assembly: OwinStartup(typeof(Startup))]
+[assembly : OwinStartup(typeof(Startup))]
 
-namespace VooDiDb.SecurityServer
-{
-    public class Startup
-    {
-        public void Configuration(IAppBuilder app)
-        {
+namespace VooDiDb.SecurityServer {
+    public class Startup {
+        public void Configuration(IAppBuilder app) {
             var config = new HttpConfiguration();
             var container = new WindsorContainer();
             container.Install(new AppWindsorInstaller());
@@ -30,17 +25,15 @@ namespace VooDiDb.SecurityServer
             // Web API routes
             GlobalConfiguration.Configure(WebApiConfig.Register);
             config.MapHttpAttributeRoutes();
-            ConfigureOAuth(app, container);
+            this.ConfigureOAuth(app, container);
             app.UseCors(CorsOptions.AllowAll);
             app.UseWebApi(config);
         }
 
-        public void ConfigureOAuth(IAppBuilder app, IWindsorContainer container)
-        {
+        public void ConfigureOAuth(IAppBuilder app, IWindsorContainer container) {
             var audienceService = container.Resolve<IAudienceService>();
             var userService = container.Resolve<IUserService>();
-            var oAuthServerOptions = new OAuthAuthorizationServerOptions
-            {
+            var oAuthServerOptions = new OAuthAuthorizationServerOptions {
                 //For Dev enviroment only (on production should be AllowInsecureHttp = false)
                 AllowInsecureHttp = true,
                 TokenEndpointPath = new PathString("/oauth2/token"),
