@@ -7,7 +7,7 @@ using VooDiDb.SecurityServer.Extensions;
 using VooDiDb.Services.Core;
 using VooDiDb.Services.Interfaces;
 
-namespace VooDiDb.SecurityServer.Controllers {
+namespace VooDiDb.SecurityServer.Controllers.OAuth {
     [RoutePrefix("api/audience")]
     public class AudienceController : ApiController {
         private readonly IAudienceService audienceService;

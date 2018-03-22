@@ -21,7 +21,7 @@ namespace VooDiDb.Infrastructure.Business {
             RandomNumberGenerator.Create().GetBytes(key);
             var base64Secret = TextEncodings.Base64Url.Encode(key);
 
-            var newAudience = new Audience { ClientId = clientId, Base64Secret = base64Secret, Name = model.Name };
+            var newAudience = new Audience { ClientId = clientId, Base64Secret = base64Secret, Name = model.Name, IsActive = false, IsDeleted = false };
             this.repository.Insert(newAudience);
             return new AudienceDTO {
                 Name = newAudience.Name,
@@ -31,7 +31,7 @@ namespace VooDiDb.Infrastructure.Business {
         }
 
         public AudienceDTO FindAudience(string id) {
-            var entry = this.repository.FindBy(x => x.ClientId == id);
+            var entry = this.repository.FindBy(x => x.ClientId == id && !x.IsDeleted && x.IsActive);
             if(entry == null) return null;
             return new AudienceDTO {
                 Name = entry.Name,

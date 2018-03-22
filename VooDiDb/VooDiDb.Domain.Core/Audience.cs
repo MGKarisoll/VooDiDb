@@ -7,5 +7,6 @@ namespace VooDiDb.Domain.Core
         public string ClientId { get; set; }
         public string Base64Secret { get; set; }
         public string Name { get; set; }
+        public bool IsActive { get; set; }
     }
 }
