@@ -44,3 +44,11 @@
 2018-03-22 15:13:02.3086 VooDiDb.Infrastructure.Business.UserService.LogIn Trace { Message = User logged in, Value = { Login = admin\admin } }
 2018-03-22 15:13:29.8909 VooDiDb.Infrastructure.Business.UserService.LogIn Trace { Message = User logged in, Value = { Login = admin\admin } }
 2018-03-22 15:22:19.6989 VooDiDb.Infrastructure.Business.UserService.LogIn Trace { Message = User logged in, Value = { Login = admin\admin } }
+2018-03-22 16:12:55.3748 VooDiDb.Infrastructure.Business.UserService.LogIn Trace { Message = User logged in, Value = { Login = admin\admin } }
+2018-03-22 16:15:36.8300 VooDiDb.Infrastructure.Business.UserService.LogIn Trace { Message = User logged in, Value = { Login = admin\admin } }
+2018-03-22 16:19:10.8627 VooDiDb.Infrastructure.Business.UserService.LogIn Trace { Message = User logged in, Value = { Login = admin\admin } }
+2018-03-22 16:26:08.7835 VooDiDb.Infrastructure.Business.UserService.LogIn Trace { Message = User logged in, Value = { Login = admin\admin } }
+2018-03-22 16:55:10.7280 VooDiDb.Infrastructure.Business.UserService.LogIn Trace { Message = User logged in, Value = { Login = admin\admin } }
+2018-03-22 17:02:19.8853 VooDiDb.Infrastructure.Business.UserService.LogIn Trace { Message = User logged in, Value = { Login = admin\admin } }
+2018-03-22 17:11:54.1454 VooDiDb.Infrastructure.Business.UserService.RegisterUser Trace { Message = User created, Value = VooDiDb.Domain.Core.User, CreatedByUserId = 1 }
+2018-03-22 17:16:03.6443 VooDiDb.Infrastructure.Business.UserService.RegisterUser Trace { Message = User created, Value = VooDiDb.Domain.Core.User, CreatedByUserId = 1 }

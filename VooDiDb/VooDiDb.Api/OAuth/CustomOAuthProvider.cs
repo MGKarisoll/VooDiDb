@@ -6,7 +6,7 @@ using Microsoft.Owin.Security.OAuth;
 using VooDiDb.Services.Core;
 using VooDiDb.Services.Interfaces;
 
-namespace VooDiDb.SecurityServer.OAuth {
+namespace VooDiDb.Api.OAuth {
     public class CustomOAuthProvider : OAuthAuthorizationServerProvider {
         private readonly IAudienceService audienceService;
         private readonly IUserService userService;
@@ -49,9 +49,10 @@ namespace VooDiDb.SecurityServer.OAuth {
 
             var identity = new ClaimsIdentity("JWT");
 
-            identity.AddClaim(new Claim(ClaimTypes.Name, user.Name));
+            identity.AddClaim(new Claim("Identity", user.Id));
+            identity.AddClaim(new Claim("Name", user.Name));
             identity.AddClaim(new Claim("FullName", user.FullName));
-            identity.AddClaim(new Claim(ClaimTypes.Role, user.Role.ToString()));
+            identity.AddClaim(new Claim("Role", user.Role.ToString()));
 
             var props = new AuthenticationProperties(new Dictionary<string, string> {
                 {

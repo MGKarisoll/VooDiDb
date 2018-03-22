@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Http;
+using System.Web.Http.Dispatcher;
 using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor;
 using Microsoft.Owin;
@@ -9,29 +10,36 @@ using Microsoft.Owin.Security.DataHandler.Encoder;
 using Microsoft.Owin.Security.Jwt;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
-using VooDiDb.SecurityServer;
-using VooDiDb.SecurityServer.OAuth;
-using VooDiDb.SecurityServer.WindsorConfig;
+using VooDiDb.Api;
+using VooDiDb.Api.OAuth;
+using VooDiDb.Api.WindsorConfig;
 using VooDiDb.Services.Interfaces;
 
 [assembly : OwinStartup(typeof(Startup))]
 
-namespace VooDiDb.SecurityServer {
+namespace VooDiDb.Api {
     public class Startup {
         public void Configuration(IAppBuilder app) {
             var config = new HttpConfiguration();
             var container = new WindsorContainer();
+
+            app.UseWebApi(config);
+            config.DependencyResolver = new WindsorDependencyResolver(container);
+            config.MapHttpAttributeRoutes();
+
             container.Install(new AppWindsorInstaller());
             container.Kernel.Resolver.AddSubResolver(new CollectionResolver(container.Kernel, true));
-            var dr = new WindsorDependencyResolver(container);
-            config.DependencyResolver = dr;
+
             // Web API routes
             GlobalConfiguration.Configure(WebApiConfig.Register);
-            config.MapHttpAttributeRoutes();
+
             this.ConfigureOAuthServer(app, container);
             this.ConfigureOAuthClient(app);
             app.UseCors(CorsOptions.AllowAll);
-            app.UseWebApi(config);
+
+            GlobalConfiguration.Configuration.Services.Replace(
+                typeof(IHttpControllerActivator),
+                new WindsorHttpControllerActivator(container));
         }
 
         public void ConfigureOAuthServer(IAppBuilder app, IWindsorContainer container) {
@@ -53,16 +61,14 @@ namespace VooDiDb.SecurityServer {
         public void ConfigureOAuthClient(IAppBuilder app) {
             var issuer = "http://localhost:7507/";
             var audience = "44c11f290c604cc8a73da9e99c73be06";
-            var secret =  TextEncodings.Base64Url.Decode("DZ88Y-Z0U6a6hWALALUdc7Xz_vD57vJuwEnT6FkRvp8");
+            var secret = TextEncodings.Base64Url.Decode("DZ88Y-Z0U6a6hWALALUdc7Xz_vD57vJuwEnT6FkRvp8");
 
             app.UseJwtBearerAuthentication(
-                new JwtBearerAuthenticationOptions
-                {
+                new JwtBearerAuthenticationOptions {
                     AuthenticationMode = AuthenticationMode.Active,
                     AllowedAudiences = new[] { audience },
-                    IssuerSecurityKeyProviders = new IIssuerSecurityKeyProvider[]
-                    {
-                        new SymmetricKeyIssuerSecurityKeyProvider(issuer, secret), 
+                    IssuerSecurityKeyProviders = new IIssuerSecurityKeyProvider[] {
+                        new SymmetricKeyIssuerSecurityKeyProvider(issuer, secret)
                     }
                 });
         }

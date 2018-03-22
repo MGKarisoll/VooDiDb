@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web.Http.Dependencies;
 using Castle.Windsor;
 
-namespace VooDiDb.SecurityServer.WindsorConfig
+namespace VooDiDb.Api.WindsorConfig
 {
     public class WindsorDependencyResolver : IDependencyResolver
     {
@@ -22,17 +22,17 @@ namespace VooDiDb.SecurityServer.WindsorConfig
 
         public object GetService(Type serviceType)
         {
-            return container.Kernel.HasComponent(serviceType) ? container.Resolve(serviceType) : null;
+            return this.container.Kernel.HasComponent(serviceType) ? this.container.Resolve(serviceType) : null;
         }
 
         public IEnumerable<object> GetServices(Type serviceType)
         {
-            return container.ResolveAll(serviceType).Cast<object>().ToArray();
+            return this.container.ResolveAll(serviceType).Cast<object>().ToArray();
         }
 
         public IDependencyScope BeginScope()
         {
-            return new WindsorDependencyScope(container);
+            return new WindsorDependencyScope(this.container);
         }
     }
 }

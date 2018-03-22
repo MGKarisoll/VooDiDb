@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web.Http.ModelBinding;
 using VooDiDb.Services.Core.Validation;
 
-namespace VooDiDb.SecurityServer.Extensions {
+namespace VooDiDb.Api.Extensions {
     public static class ValidationServiceExtension {
         public static IEnumerable<ValidationResult> Validate<T>(this IValidationService<T> service,
                                                                 T model,

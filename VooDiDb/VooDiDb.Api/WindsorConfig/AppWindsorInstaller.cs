@@ -13,7 +13,7 @@ using VooDiDb.Infrastructure.Data;
 using VooDiDb.Infrastructure.Data.Context;
 using VooDiDb.Services.Interfaces;
 
-namespace VooDiDb.SecurityServer.WindsorConfig
+namespace VooDiDb.Api.WindsorConfig
 {
     public class AppWindsorInstaller : IWindsorInstaller
     {

@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Web.Http;
 
-namespace VooDiDb.SecurityServer.Controllers {
+namespace VooDiDb.Api.Controllers {
     [Authorize]
     [RoutePrefix("api/protected")]
     public class ProtectedController : ApiController {

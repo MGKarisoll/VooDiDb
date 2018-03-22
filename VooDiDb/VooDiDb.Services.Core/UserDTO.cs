@@ -5,6 +5,25 @@ using VooDiDb.Services.Core.Validation;
 
 namespace VooDiDb.Services.Core
 {
+    public class UserRegistrationDTO {
+        public string Name { get; set; }
+        public string FullName { get; set; }
+        public string Login { get; set; }
+        public string Password { get; set; }
+        public int DepartmentId { get; set; }
+        public int PostId { get; set; }
+        public UserRolesEnum Role { get; set; }
+    }
+
+    public class UserEditDTO {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string FullName { get; set; }
+        public string Login { get; set; }
+        public int DepartmentId { get; set; }
+        public int PostId { get; set; }
+        public UserRolesEnum Role { get; set; }
+    }
     public class UserDTO : IValidatableObject
     {
         public string Id { get; set; }
@@ -22,5 +41,9 @@ namespace VooDiDb.Services.Core
             results.AddRange(validationService.Validate(this));
             return results;
         }
+    }
+
+    public class UserExtendedDTO : UserDTO {
+        public bool IsDeleted { get; set; }
     }
 }

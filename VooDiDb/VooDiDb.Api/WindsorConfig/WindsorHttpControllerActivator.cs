@@ -4,7 +4,7 @@ using System.Web.Http.Controllers;
 using System.Web.Http.Dispatcher;
 using Castle.Windsor;
 
-namespace VooDiDb.SecurityServer.WindsorConfig
+namespace VooDiDb.Api.WindsorConfig
 {
     public class WindsorHttpControllerActivator : IHttpControllerActivator
     {
@@ -19,11 +19,11 @@ namespace VooDiDb.SecurityServer.WindsorConfig
             Type controllerType)
         {
             var controller =
-                (IHttpController) container.Resolve(controllerType);
+                (IHttpController) this.container.Resolve(controllerType);
 
             request.RegisterForDispose(
                 new Release(
-                    () => container.Release(controller)));
+                    () => this.container.Release(controller)));
 
             return controller;
         }
@@ -39,7 +39,7 @@ namespace VooDiDb.SecurityServer.WindsorConfig
 
             public void Dispose()
             {
-                release();
+                this.release();
             }
         }
     }

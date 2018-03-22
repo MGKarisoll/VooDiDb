@@ -12,8 +12,8 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>VooDiDb.SecurityServer</RootNamespace>
-    <AssemblyName>VooDiDb.SecurityServer</AssemblyName>
+    <RootNamespace>VooDiDb.Api</RootNamespace>
+    <AssemblyName>VooDiDb.Api</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
@@ -144,9 +144,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\AudienceController.cs" />
+    <Compile Include="Controllers\OAuth\AudienceController.cs" />
     <Compile Include="Controllers\ProtectedController.cs" />
+    <Compile Include="Controllers\UsersController.cs" />
+    <Compile Include="Extensions\ClaimsIdentityExtensions.cs" />
     <Compile Include="Extensions\ValidationServiceExtension.cs" />
+    <Compile Include="Filters\ExtendedUserClaimsAuthorizeAttribute.cs" />
     <Compile Include="WindsorConfig\AppWindsorInstaller.cs" />
     <Compile Include="WindsorConfig\WindsorDependencyResolver.cs" />
     <Compile Include="WindsorConfig\WindsorDependencyScope.cs" />
@@ -170,7 +173,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\Base\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>

@@ -5,7 +5,7 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.DataHandler.Encoder;
 using VooDiDb.Services.Interfaces;
 
-namespace VooDiDb.SecurityServer.OAuth {
+namespace VooDiDb.Api.OAuth {
     public class CustomJwtFormat : ISecureDataFormat<AuthenticationTicket> {
         private const string AUDIENCE_PROPERTY_KEY = "audience";
         private readonly IAudienceService audienceService;

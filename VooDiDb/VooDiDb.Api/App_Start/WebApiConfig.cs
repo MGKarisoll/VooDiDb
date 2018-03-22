@@ -1,6 +1,7 @@
 ﻿using System.Web.Http;
+using VooDiDb.Api.Filters;
 
-namespace VooDiDb.SecurityServer {
+namespace VooDiDb.Api {
     public static class WebApiConfig {
         public static void Register(HttpConfiguration config) {
             // Web API configuration and services
@@ -13,6 +14,8 @@ namespace VooDiDb.SecurityServer {
                 "api/{controller}/{id}",
                 new { id = RouteParameter.Optional }
             );
+
+            config.Filters.Add(new ExtendedUserClaimsAuthorizeAttribute());
         }
     }
 }

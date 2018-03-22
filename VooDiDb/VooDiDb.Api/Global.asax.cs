@@ -1,6 +1,6 @@
 ﻿using System.Web;
 
-namespace VooDiDb.SecurityServer
+namespace VooDiDb.Api
 {
     public class WebApiApplication : HttpApplication
     {
