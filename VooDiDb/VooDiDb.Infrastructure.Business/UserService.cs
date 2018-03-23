@@ -70,7 +70,7 @@ namespace VooDiDb.Infrastructure.Business {
             if(currentUser.Role != UserRolesEnum.Administrator) throw new ArgumentException("User has no permissions to delete user.", nameof(login));
             var entry = this.repository.FindById(userId);
             entry.IsDeleted = true;
-            return this.repository.Update(entry);
+            return this.repository.Update(entry) == null ? 0 : 1;
         }
 
         public UserDTO LogIn(UserLoginDTO loginModel) {
