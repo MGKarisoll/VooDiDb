@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Web.Http;
 using VooDiDb.Api.Extensions;
+using VooDiDb.Infrastructure.Business.ValidationServices;
 using VooDiDb.Services.Core;
 using VooDiDb.Services.Interfaces;
 
@@ -16,20 +17,35 @@ namespace VooDiDb.Api.Controllers {
         }
 
         public HttpResponseMessage Get() {
-            if(!this.User.TryClaimsUserId(out var currentUserId))
+            if(!this.User.TryClaimsUserIdentity(out var login))
                 return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, "User Identity is invalid");
-            var data = this.userService.GetUsers(currentUserId);
+            var data = this.userService.Get(login);
             return this.Request.CreateResponse(HttpStatusCode.OK, data);
         }
 
-        public HttpResponseMessage Post(UserRegistrationDTO userRegistrationDTO) {
-            if(!this.User.TryClaimsUserId(out var currentUserId))
+        public HttpResponseMessage Post(UserRegistrationDTO model) {
+            if(!this.User.TryClaimsUserIdentity(out var login))
                 return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, "User Identity is invalid");
+            this.userService.GetService(typeof(CreationUserValidationService), model, this.ModelState);
             if(!this.ModelState.IsValid)
                 return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, this.ModelState);
 
-            this.userService.RegisterUser(userRegistrationDTO, currentUserId);
-            return this.Request.CreateResponse(HttpStatusCode.OK);
+            return this.Request.CreateResponse(HttpStatusCode.OK, this.userService.Create(model, login));
+        }
+
+        public HttpResponseMessage Put(long id, UserDTO model) {
+            if(!this.User.TryClaimsUserIdentity(out var login))
+                return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, "User Identity is invalid");
+            this.userService.GetService(typeof(EditionUserValidationService), model, this.ModelState);
+            if(!this.ModelState.IsValid) return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, this.ModelState);
+
+            return this.Request.CreateResponse(HttpStatusCode.OK, this.userService.Update(model, login));
+        }
+
+        public HttpResponseMessage Delete(long id) {
+            if (!this.User.TryClaimsUserIdentity(out var login))
+                return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, "User Identity is invalid");
+            return this.Request.CreateResponse(HttpStatusCode.OK, this.userService.Delete(id, login));
         }
     }
 }
