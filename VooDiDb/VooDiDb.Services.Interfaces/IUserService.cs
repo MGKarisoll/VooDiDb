@@ -6,11 +6,13 @@ namespace VooDiDb.Services.Interfaces
 {
     public interface IUserService : IServiceProvider
     {
-        void RegisterUser(UserRegistrationDTO userRegistrationDTO, int currentUserId);
-        UserDTO LogIn(LoginDTO loginModel);
+        UserDTO Create(UserRegistrationDTO userRegistrationDTO, string login);
+        UserDTO LogIn(UserLoginDTO loginModel);
 
-        IEnumerable<UserDTO> GetUsers(int currentUserId);
+        ICollection<UserDTO> Get(string login);
 
-        void EditUser(UserEditDTO user, int currentUserId);
+        UserDTO Update(UserDTO user, string login);
+
+        int Delete(long userId, string login);
     }
 }
