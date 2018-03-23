@@ -6,5 +6,6 @@
         public string Name { get; set; }
         public bool IsActive { get; set; }
         public byte[] RowVersion { get; set; }
+        public int SortOrder { get; set; }
     }
 }
