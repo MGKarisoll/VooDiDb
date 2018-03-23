@@ -13,17 +13,17 @@ namespace VooDiDb.Domain.Interfaces
         T FindById(long id);
         T FindBy(Expression<Func<T,  bool>> expression);
         bool Any(Expression<Func<T, bool>> expression);
-        int Insert(T value);
-        int Update(T value);
-        int Delete(T value);
+        T Insert(T value);
+        T Update(T value);
+        bool Delete(T value);
 
         Task<IQueryable<T>> GetAllAsync();
         Task<IQueryable<T>> GetAllAsync(Expression<Func<T, bool>> expression);
         Task<T> FindByIdAsync(long id);
         Task<T> FindByAsync(Expression<Func<T, bool>> expression);
         Task<bool> AnyAsync(Expression<Func<T, bool>> expression);
-        Task<int> InsertAsync(T value);
-        Task<int> UpdateAsync(T value);
-        Task<int> DeleteAsync(T value);
+        Task<T> InsertAsync(T value);
+        Task<T> UpdateAsync(T value);
+        Task<bool> DeleteAsync(T value);
     }
 }

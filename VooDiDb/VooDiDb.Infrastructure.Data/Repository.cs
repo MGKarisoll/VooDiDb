@@ -34,21 +34,23 @@ namespace VooDiDb.Infrastructure.Data {
             return this.context.Set<T>().Any(expression);
         }
 
-        public int Insert(T value) {
+        public T Insert(T value) {
             this.context.Set<T>().Add(value);
-            return this.context.SaveChanges();
+            this.context.SaveChanges();
+            return value;
         }
 
-        public int Update(T value) {
+        public T Update(T value) {
             var entry = this.context.Set<T>().Find(value.Id);
             this.context.Entry(entry).CurrentValues.SetValues(value);
             this.context.Entry(entry).State = EntityState.Modified;
-            return this.context.SaveChanges();
+            this.context.SaveChanges();
+            return entry;
         }
 
-        public int Delete(T value) {
+        public bool Delete(T value) {
             this.context.Entry(value).State = EntityState.Deleted;
-            return this.context.SaveChanges();
+            return this.context.SaveChanges() > 0;
         }
 
         public async Task<IQueryable<T>> GetAllAsync() {
@@ -71,19 +73,21 @@ namespace VooDiDb.Infrastructure.Data {
             return await this.context.Set<T>().AnyAsync(expression);
         }
 
-        public async Task<int> InsertAsync(T value) {
+        public async Task<T> InsertAsync(T value) {
             this.context.Set<T>().Add(value);
-            return await this.context.SaveChangesAsync();
+            await this.context.SaveChangesAsync();
+            return value;
         }
 
-        public async Task<int> UpdateAsync(T value) {
+        public async Task<T> UpdateAsync(T value) {
             this.context.Entry(value).State = EntityState.Modified;
-            return await this.context.SaveChangesAsync();
+            await this.context.SaveChangesAsync();
+            return value;
         }
 
-        public async Task<int> DeleteAsync(T value) {
+        public async Task<bool> DeleteAsync(T value) {
             this.context.Entry(value).State = EntityState.Deleted;
-            return await this.context.SaveChangesAsync();
+            return await this.context.SaveChangesAsync() > 0;
         }
 
         public bool Any() {
