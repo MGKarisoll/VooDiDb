@@ -11,6 +11,8 @@ namespace VooDiDb.Services.Interfaces
 
         ICollection<UserDTO> Get(string login);
 
+        UserDTO Get(long id, string login);
+
         UserDTO Update(UserDTO user, string login);
 
         int Delete(long userId, string login);

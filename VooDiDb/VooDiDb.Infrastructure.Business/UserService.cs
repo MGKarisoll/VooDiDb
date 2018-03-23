@@ -50,6 +50,13 @@ namespace VooDiDb.Infrastructure.Business {
             return query.ToList().Select(x => x.MapToUserDTO()).ToList();
         }
 
+        public UserDTO Get(long id, string login) {
+            var currentUser = this.repository.FindBy(x => x.Login == login);
+            if(currentUser == null) return null;
+            if(currentUser.Role == UserRolesEnum.Administrator) return this.repository.FindById(id).MapToUserDTO();
+            return this.repository.FindBy(x => x.Id == id && !x.IsDeleted).MapToUserDTO();
+        }
+
         public object GetService(Type serviceType) {
             if(serviceType == typeof(CreationUserValidationService))
                 return new CreationUserValidationService(this.repository);
