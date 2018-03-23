@@ -41,7 +41,7 @@ namespace VooDiDb.Api.OAuth {
 
         public override Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context) {
             context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "*" });
-            var user = this.userService.LogIn(new LoginDTO { Login = context.UserName, Password = context.Password });
+            var user = this.userService.LogIn(new UserLoginDTO { Login = context.UserName, Password = context.Password });
             if(user == null) {
                 context.SetError("invalid_grant", "The user name or password is incorrect");
                 return Task.FromResult<object>(null);
@@ -49,7 +49,7 @@ namespace VooDiDb.Api.OAuth {
 
             var identity = new ClaimsIdentity("JWT");
 
-            identity.AddClaim(new Claim("Identity", user.Id));
+            identity.AddClaim(new Claim("Identity", user.Login));
             identity.AddClaim(new Claim("Name", user.Name));
             identity.AddClaim(new Claim("FullName", user.FullName));
             identity.AddClaim(new Claim("Role", user.Role.ToString()));
