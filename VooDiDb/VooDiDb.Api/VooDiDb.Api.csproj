@@ -145,6 +145,7 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\OAuth\AudienceController.cs" />
+    <Compile Include="Controllers\PostsController.cs" />
     <Compile Include="Controllers\ProtectedController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Extensions\ClaimsIdentityExtensions.cs" />

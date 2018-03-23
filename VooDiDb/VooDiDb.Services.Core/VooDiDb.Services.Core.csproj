@@ -45,6 +45,7 @@
     <Compile Include="AudienceDTO.cs" />
     <Compile Include="DepartmentDTO.cs" />
     <Compile Include="LoginDTO.cs" />
+    <Compile Include="MappingExtensions\PostMappingExtension.cs" />
     <Compile Include="MappingExtensions\UserMappingExtension.cs" />
     <Compile Include="PostDTO.cs" />
     <Compile Include="UserDTO.cs" />
