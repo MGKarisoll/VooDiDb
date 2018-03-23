@@ -23,7 +23,6 @@ namespace VooDiDb.Api {
             var config = new HttpConfiguration();
             var container = new WindsorContainer();
 
-            app.UseWebApi(config);
             config.DependencyResolver = new WindsorDependencyResolver(container);
             config.MapHttpAttributeRoutes();
 
@@ -32,14 +31,15 @@ namespace VooDiDb.Api {
 
             // Web API routes
             GlobalConfiguration.Configure(WebApiConfig.Register);
-
-            this.ConfigureOAuthServer(app, container);
-            this.ConfigureOAuthClient(app);
-            app.UseCors(CorsOptions.AllowAll);
-
             GlobalConfiguration.Configuration.Services.Replace(
                 typeof(IHttpControllerActivator),
                 new WindsorHttpControllerActivator(container));
+
+            this.ConfigureOAuthServer(app, container);
+            this.ConfigureOAuthClient(app);
+
+            app.UseWebApi(config);
+            app.UseCors(CorsOptions.AllowAll);
         }
 
         public void ConfigureOAuthServer(IAppBuilder app, IWindsorContainer container) {
