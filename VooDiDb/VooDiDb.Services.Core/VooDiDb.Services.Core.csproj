@@ -45,6 +45,7 @@
     <Compile Include="AudienceDTO.cs" />
     <Compile Include="DepartmentDTO.cs" />
     <Compile Include="LoginDTO.cs" />
+    <Compile Include="MappingExtensions\UserMappingExtension.cs" />
     <Compile Include="PostDTO.cs" />
     <Compile Include="UserDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -54,6 +55,10 @@
     <ProjectReference Include="..\VooDiDb.Domain.Core\VooDiDb.Domain.Core.csproj">
       <Project>{691234A2-CBD1-4F48-94D9-712641090F4B}</Project>
       <Name>VooDiDb.Domain.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VooDiDb.Utilites.Util\VooDiDb.Utilites.Util.csproj">
+      <Project>{51C5EC39-D3B8-48B8-BC34-06CD6619F477}</Project>
+      <Name>VooDiDb.Utilites.Util</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
