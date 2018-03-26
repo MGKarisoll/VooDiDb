@@ -51,7 +51,7 @@ namespace VooDiDb.Api {
                 TokenEndpointPath = new PathString("/oauth2/token"),
                 AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(30),
                 Provider = new CustomOAuthProvider(audienceService, userService),
-                AccessTokenFormat = new CustomJwtFormat("http://localhost:7507/", audienceService)
+                AccessTokenFormat = new CustomJwtFormat("http://localhost:7507/", audienceService),
             };
 
             // OAuth 2.0 Bearer Access Token Generation
