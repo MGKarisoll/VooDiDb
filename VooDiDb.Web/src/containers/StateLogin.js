@@ -1,23 +1,11 @@
 import { connect } from 'react-redux'
 import { logIn, logOut } from '../actions'
 import LoginForm from '../components/LoginForm'
+import TokenInfo from '../models/TokenInfo';
 
-const getTokenInfo = (logins) => {
-    var tokeninfo = null;
-        try {
-            tokeninfo = JSON.parse(atob(logins.split('.')[1]));
-        } catch(e) { 
-            tokeninfo = null;
-        }
-        var data = {
-            isLoggedIn: tokeninfo ? new Date(tokeninfo.exp * 1000) > new Date() : false,
-            tokenInfo: tokeninfo
-        };
-        return data;
-}
 
 const mapStateToProps = state => ({
-    token : getTokenInfo(state.logins)
+    token : new TokenInfo(state.logins)
 })
 
 const mapDispatchToProps = dispatch => ({

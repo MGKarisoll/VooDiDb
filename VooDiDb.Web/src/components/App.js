@@ -2,11 +2,11 @@ import React from 'react'
 import Footer from './Footer'
 import AddTodo from '../containers/AddTodo'
 import VisibleTodoList from '../containers/VisibleTodoList'
-import StateLogin from '../containers/StateLogin'
+import NavigationBar from '../containers/NavigationBar'
 
 const App = () => (
   <div>
-    <StateLogin />
+    <NavigationBar />
     <AddTodo />
     <VisibleTodoList />
     <Footer />
