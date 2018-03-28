@@ -80,6 +80,15 @@ namespace VooDiDb.Infrastructure.Business {
             return this.repository.Update(entry) == null ? 0 : 1;
         }
 
+        public IDictionary<string, string> GetUserDetails(long id) {
+            var entry = this.repository.FindById(id);
+            if(entry == null) return null;
+            return new Dictionary<string, string> {
+                { "Department", entry.Department.Name},
+                { "Post", entry.Post.Name }
+            };
+        }
+
         public UserDTO LogIn(UserLoginDTO loginModel) {
             try {
                 var item = loginModel.MapToUser();

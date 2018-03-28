@@ -47,12 +47,16 @@ namespace VooDiDb.Api.OAuth {
                 return Task.FromResult<object>(null);
             }
 
+            var userInfo = this.userService.GetUserDetails(user.Id);
+
             var identity = new ClaimsIdentity("JWT");
 
             identity.AddClaim(new Claim("Identity", user.Login));
             identity.AddClaim(new Claim("Name", user.Name));
             identity.AddClaim(new Claim("FullName", user.FullName));
             identity.AddClaim(new Claim("Role", user.Role.ToString()));
+            identity.AddClaim(new Claim("Department", userInfo["Department"]));
+            identity.AddClaim(new Claim("Post", userInfo["Post"]));
 
             var props = new AuthenticationProperties(new Dictionary<string, string> {
                 {

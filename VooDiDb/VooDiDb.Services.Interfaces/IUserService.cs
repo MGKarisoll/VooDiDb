@@ -16,5 +16,7 @@ namespace VooDiDb.Services.Interfaces
         UserDTO Update(UserDTO user, string login);
 
         int Delete(long userId, string login);
+
+        IDictionary<string, string> GetUserDetails(long id);
     }
 }

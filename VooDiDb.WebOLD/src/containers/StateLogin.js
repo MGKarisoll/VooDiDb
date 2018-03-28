@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
-import { logIn, logOut } from '../actions'
-import LoginForm from '../components/LoginForm'
-import TokenInfo from '../models/TokenInfo';
+import { logIn, logOut } from '../actions/index.js'
+import LoginForm from '../components/LoginForm.js'
+import TokenInfo from '../models/TokenInfo.js';
 
 
 const mapStateToProps = state => ({
