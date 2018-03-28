@@ -2,13 +2,9 @@ import React from 'react'
 
 const LoginForm = ({ token, fnLogIn, fnLogOut }) => {
     console.log(token);
-    console.log(fnLogIn);
-    console.log(fnLogOut);
-
-    let login;
-    let password;
-
     if(!token || !token.isLoggedIn) {
+        let login;
+        let password;
         return (
             <div>
                 <form onSubmit={e => {
@@ -51,9 +47,6 @@ const LoginForm = ({ token, fnLogIn, fnLogOut }) => {
                         return response.json();
                     }).then(function(json) {
                         fnLogIn(json.access_token)
-    
-                        login.value = '';
-                        password.value = '';
                     });
                 }}>
                     <input ref={node => login = node} />

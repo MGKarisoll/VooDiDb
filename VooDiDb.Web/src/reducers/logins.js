@@ -19,13 +19,16 @@ const setLogin = function(data) {
 }
 
 const logins = (state = getLogin(), action) => {
+    let data;
     switch (action.type) {
         case 'LOG_IN':
-            setLogin(action.token);
-            return state;
+            data = action.token;
+            setLogin(data);
+            return data;
         case 'LOG_OUT':
-            setLogin(null);
-            return state;
+            data = null;
+            setLogin(data);
+            return data;
         default:
             return state
     }
