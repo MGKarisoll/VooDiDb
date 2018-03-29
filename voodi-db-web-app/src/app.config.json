@@ -1,0 +1,7 @@
+{
+    "server" : {
+        "host": "http://localhost:7507",
+        "auth": "/oauth2/token",
+        "clientId": "44c11f290c604cc8a73da9e99c73be06"
+    }
+}
