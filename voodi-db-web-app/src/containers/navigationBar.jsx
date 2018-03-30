@@ -1,19 +1,19 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
+import { withStyles } from 'material-ui/styles';
 import AppBar from 'material-ui/AppBar';
-import Drawer from 'material-ui/Drawer';
-import MenuItem from 'material-ui/MenuItem';
+import Toolbar from 'material-ui/Toolbar';
+import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
-import NavigationMenu from 'material-ui/svg-icons/navigation/menu';
+import Menu, { MenuItem } from 'material-ui/Menu';
+import Icon from 'material-ui/Icon';
 
 import LoginForm from '../components/loginForm';
 import UserInfo from '../components/userInfo.jsx';
 import TokenInfo from '../models/tokenInfo.js';
 
-const mapStateToProps = state => ({
-    token : new TokenInfo(state.token)
-});
+
 
 class NavigationBar extends React.Component {
     constructor(props) {
@@ -24,24 +24,37 @@ class NavigationBar extends React.Component {
     }    
 
     render() {
+        const { auth, anchorEl } = this.state;
+        const styles = {
+            root: {
+              flexGrow: 1,
+            },
+            flex: {
+              flex: 1,
+            },
+            menuButton: {
+              marginLeft: -12,
+              marginRight: 20,
+            },
+        };
         return (
-        <AppBar title="Title"
-            iconElementLeft={
-                <div>
-                    <IconButton onClick={this.handleToggle}><NavigationMenu color={'#fff'} /></IconButton>
-                    <Drawer
-                        docked={false}
-                        width={200}
-                        open={this.state.open}
-                        onRequestChange={(open) => this.setState({open})} >
-                        <MenuItem onClick={this.handleClose}>Home</MenuItem>
-                        <MenuItem onClick={this.handleClose}>About</MenuItem>
-                    </Drawer>
-                </div>
-            }
-            iconElementRight={this.props.token.isLogged ? <UserInfo /> : <LoginForm />} />
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton onClick={this.handleClick} color="inherit">
+              <Icon>menu</Icon>
+            </IconButton>
+            <Typography variant="title" color="inherit" style={styles.flex}>
+              Title
+            </Typography>
+            {this.props.user.isLogged ? <UserInfo /> : <LoginForm/>}
+          </Toolbar>
+        </AppBar>
         );
     }
 }
+
+const mapStateToProps = state => ({
+    user : new TokenInfo(state.token)
+});
 
 export default connect(mapStateToProps)(NavigationBar)

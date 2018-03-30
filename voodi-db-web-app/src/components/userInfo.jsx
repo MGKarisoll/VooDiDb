@@ -1,9 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import IconButton from 'material-ui/IconButton';
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import Icon from 'material-ui/Icon';
+import Menu, { MenuItem } from 'material-ui/Menu';
 import Divider from 'material-ui/Divider';
 
 import TokenInfo from '../models/tokenInfo.js';
@@ -15,7 +14,7 @@ const mapDispatchToProps = dispatch => ({
 })
 
 const mapStateToProps = state => ({
-    token: new TokenInfo(state.token)
+    user: new TokenInfo(state.token)
 });
 
 class UserInfo extends React.Component {
@@ -24,15 +23,8 @@ class UserInfo extends React.Component {
         super(props);
 
         this.state = {
+            anchorEl: null,
             open: false,
-            anchorOrigin: {
-                horizontal: 'left',
-                vertical: 'bottom',
-            },
-            targetOrigin: {
-                horizontal: 'left',
-                vertical: 'top',
-            },
         };
 
         this.handleClick = (event) => {
@@ -78,51 +70,43 @@ class UserInfo extends React.Component {
     }
   
     render() {
-      const style = {
-        userName: {
+        const { anchorEl } = this.state;
+        const style = {
+            userName: {
 
-        },
-        userDepartment: {
-          display: 'block',
-          lineHeight: '30px',
-          color: '#737373'
-        },
-        userPost: {
-          display: 'block',
-          lineHeight: '26px',
-          color: '#737373'
-        }
-      }
-      return (
-        <IconMenu
-            iconButtonElement={
-            <IconButton>
-                <MoreVertIcon color={'#fff'} />
-            </IconButton>
+            },
+            userDepartment: {
+            display: 'block',
+            lineHeight: '30px',
+            color: '#737373'
+            },
+            userPost: {
+            display: 'block',
+            lineHeight: '26px',
+            color: '#737373'
             }
-            targetOrigin={{horizontal: 'right', vertical: 'top'}}
-            anchorOrigin={{horizontal: 'right', vertical: 'top'}} >
-            
-            <MenuItem children={
-              <div>
-                <span style={style.userName}>{this.props.token.userName}</span>
-                {
-                  this.props.token.department
-                  ? <span style={style.userDepartment}>{this.props.token.department}</span>
-                  : ''
-                }
-                {
-                  this.props.token.post
-                  ? <span style={style.userPost}>{this.props.token.post}</span>
-                  : ''
-                }
-              </div>
-            } />
-            <Divider />
-            <MenuItem primaryText="Help" onClick={this.onClickHelp} />
-            <MenuItem primaryText="Sign out" onClick={this.onClickSighOut} />
-        </IconMenu>
-      )
+        }
+        return (
+            <div>
+                    <IconButton
+                    aria-owns={anchorEl ? 'simple-menu' : null}
+                    aria-haspopup="true"
+                    onClick={this.handleClick}
+                    color="inherit"
+                    >
+                        <Icon>account_circle</Icon>
+                    </IconButton>
+                    <Menu
+                    id="simple-menu"
+                    anchorEl={anchorEl}
+                    open={this.state.open}
+                    onClose={this.handleRequestClose}
+                    >
+                    <MenuItem onClick={this.handleRequestClose}>Profile</MenuItem>
+                    <MenuItem onClick={this.handleRequestClose}>My account</MenuItem>
+                    </Menu>
+                </div>
+        )
     }
   }
 

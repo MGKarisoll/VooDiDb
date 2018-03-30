@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { changeLang } from '../actions/langActions.js';
+import { MuiThemeProvider, createMuiTheme, getMuiTheme } from 'material-ui/styles';
 
 class Footer extends React.Component {
 
@@ -18,9 +18,8 @@ class Footer extends React.Component {
     }
 
     render() {
-        const style = getMuiTheme();
         return(
-            <div style={{backgroundColor:style.palette.primary3Color}} className="footer">
+            <div className="footer">
                 <a href="!#" onClick={this.onChangeToRU}>ru</a> | <a href="!#" onClick={this.onChangeToEn}>eng</a>
             </div>
         );

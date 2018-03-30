@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {signIn, signOut} from '../actions/loginActions'
 
 import TokenInfo from '../models/tokenInfo.js';
+import NavigationBar from '../containers/navigationBar';
 
 const mapStateToProps = state => ({
     token: new TokenInfo(state.token)
@@ -23,9 +24,12 @@ class HomePage extends React.Component {
 
     render() {
         return (
-            <div style={{backgroundColor:"silver", minHeight:"100%"}}>
-                <p>This is home page.</p>
-            </div>
+            <div>
+                <NavigationBar />
+                <div style={{backgroundColor:"silver", minHeight:"100%"}}>
+                    <p>This is home page.</p>
+                </div>
+            </div>            
         )
     }
 }

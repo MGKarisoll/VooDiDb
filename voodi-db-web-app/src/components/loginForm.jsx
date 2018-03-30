@@ -1,22 +1,27 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import {FormattedMessage, FormattedHTMLMessage} from 'react-intl';
-
-import FlatButton from 'material-ui/FlatButton';
-import { Dialog } from 'material-ui';
-import TextField from 'material-ui/TextField';
-import RaisedButton from 'material-ui/RaisedButton';
-import CircularProgress from 'material-ui/CircularProgress';
+import { FormattedMessage } from 'react-intl';
 
 import TokenInfo from '../models/tokenInfo.js';
 import {signIn, signOut} from '../actions/loginActions.js';
 import config from '../app.config.json';
 
+import Button from 'material-ui/Button';
+import TextField from 'material-ui/TextField';
+import { LinearProgress  } from 'material-ui/Progress';
+import IconButton from 'material-ui/IconButton';
+import Icon from 'material-ui/Icon';
+import Dialog, {
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    withMobileDialog,
+  } from 'material-ui/Dialog';
+
 class LoginForm extends React.Component {
     constructor(props) {
         super(props);
-
-        console.log(props);
 
         this.state = {
             open: false,
@@ -74,6 +79,9 @@ class LoginForm extends React.Component {
                 .then(response => {
                     this.setState({isLoading: false, open: false});
                     this.props.signIn(response.access_token);
+                    var tokenInfo = new TokenInfo(response.access_token);
+                    if(tokenInfo.role === "Administrator") document.location = "/admin";
+                    this.setState({isLoading : false});
                 });
     
         }
@@ -90,49 +98,67 @@ class LoginForm extends React.Component {
     }
 
     render() {
+        const { fullScreen } = this.props;
         const style = {
-            dialog: {
-                width: '300px',
-                maxWidth: '90%'
+            dialogTitle: {
+                textAlign: !this.state.isLoading? "start" : "center"
             },
-            circularParent: {
-                display: !this.state.isLoading ? 'none' : 'flex', 
-                height: '168px', 
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center'
+            form: {
+                display: this.state.isLoading ? "none" : "initial"
+            },
+            loader: {
+                display: "block",
+                marginTop: "20px",
+                visibility: this.state.isLoading ? "visible" : "hidden"
             }
-        };
+        }
         return (
-            <FlatButton label={<FormattedMessage id="button.signin"
-                                    defaultMessage={`sign in`}/>} 
-                        primary={true} onClick={this.handleOpen} style={{color: "#fff"}} >
-                <Dialog title={<h3><FormattedHTMLMessage id="title.signin" defaultMessage={`Sign in`} /></h3>}
-                    contentStyle={style.dialog}
-                    modal={false}
+            <div>
+                <Button color="inherit"
+                    children={
+                        <FormattedMessage id="signin" defaultMessage={'sign in'}/>
+                    }
+                    onClick={this.handleOpen}/>
+                <Dialog
+                    fullScreen={fullScreen}
                     open={this.state.open}
-                    onRequestClose={this.handleClose} >
-                    <form onSubmit={this.handleSubmit}>
-                        <div style={{display: this.state.isLoading ? 'none' : 'block'}}>
-                            <TextField hintText='Login' type="text" onChange={this.onChangeLogin} />
-                            <br />
-                            <TextField hintText='Password' type="password" onChange={this.onChangePassword} />
-                            <br />
-                            <RaisedButton label="Sign in" primary={true} fullWidth={true} type="submit" />
-                            <FlatButton label="Cancel" primary={true} fullWidth={true} type="reset" onClick={this.handleClose} />                        
-                        </div>
-                        <div style={style.circularParent}>
-                            <CircularProgress />
-                        </div>
-                    </form>
-                </ Dialog>
-            </ FlatButton>
+                    onClose={this.handleClose}
+                    aria-labelledby="responsive-dialog-title"
+                    >
+                    <DialogTitle id="responsive-dialog-title" style={style.dialogTitle}>
+                        <FormattedMessage id="signing" defaultMessage="Signing" />
+                    </DialogTitle>
+                    <DialogContent>
+                        <form onSubmit={this.handleSubmit} >
+                            <TextField autoFocus margin="dense" id="login_form-login" label={
+                                <FormattedMessage id="login" defaultMessage="Login" />
+                            } type="text" fullWidth onChange={this.onChangeLogin}
+                            disabled={this.state.isLoading} />
+                            <TextField margin="dense" id="login_form-password" label={
+                                <FormattedMessage id="password" defaultMessage="Password" />
+                            } type="password" fullWidth onChange={this.onChangePassword}
+                            disabled={this.state.isLoading} />
+                            <Button type="reset" onClick={this.handleClose} color="primary" fullWidth  disabled={this.state.isLoading}>
+                                <FormattedMessage id="cancel" defaultMessage="Cancel" />
+                            </Button>
+                            <br/>
+                            <Button variant="raised" type="submit" color="secondary" fullWidth  disabled={this.state.isLoading} >
+                                <FormattedMessage id="signin" defaultMessage="Sign in" />
+                            </Button>
+                            <div style={style.loader}>
+                                <LinearProgress />
+                            </div>
+                        </form>
+                        
+                    </DialogContent>
+                </Dialog>
+            </div>
         )
     }
 }
 
 const mapStateToProps = state => ({
-    token: new TokenInfo(state.token)
+    user: new TokenInfo(state.token)
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -140,5 +166,4 @@ const mapDispatchToProps = dispatch => ({
     signOut: () => dispatch(signOut())
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginForm)
-//export default connect()(LoginForm)
+export default connect(mapStateToProps, mapDispatchToProps)(withMobileDialog()(LoginForm));

@@ -15,9 +15,13 @@ class TokenInfo {
             this.userName = jsonObject.FullName;
             this.department = jsonObject.Department ? jsonObject.Department : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
             this.post = jsonObject.Post ? jsonObject.Post : 'Lorem ipsum dolor';
+            this.role = jsonObject.Role;
         } catch(e) {
             this.expiresIn = new Date();
             this.userName = '';
+            this.department = '';
+            this.post = '';
+            this.role = 'Guest';
         }        
     }
 

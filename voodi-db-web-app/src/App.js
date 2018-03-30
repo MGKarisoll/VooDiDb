@@ -4,42 +4,20 @@ import {IntlProvider, addLocaleData} from 'react-intl';
 import { connect } from 'react-redux'
 
 
-import {cyan500} from 'material-ui/styles/colors';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
+import {blueGrey, lightBlue} from 'material-ui/colors';
+
 
 import './App.css';
 
-import NavigationBar from './containers/navigationBar.jsx';
 import Footer from './containers/footer.jsx';
 import HomePage from './pages/homePage.jsx';
 import AboutPage from './pages/aboutPage.jsx';
+import AdminPage from './pages/adminPage';
 
-
-
-
-let i18nConfigRu = {
-  locale: 'ru',
-  messages: {
-    "button.signin": "Войти",
-    "title.signin": "Вход"
-  },
-  pluralRuleFunction: function() { return ""; }
-};
-
-let i18nConfigEn = {
-  locale: 'en',
-  messages: {
-    "button.signin": "Sign in",
-    "title.signin": "Sirning"
-  },
-  pluralRuleFunction: function() { return ""; }
-};
-
-const i18nConfig = {
-  "ru": i18nConfigRu,
-  "en": i18nConfigEn
-}
+import authorize from './services/authorization';
+import TokenInfo from './models/tokenInfo';
+import i18n from './localization/i18n';
 
 const NotFound = () => (
     <div>
@@ -47,36 +25,54 @@ const NotFound = () => (
     </div>
 )
 
-const muiTheme = getMuiTheme({
+const ForbiddenPage = () => (
+  <div>
+      This content is forbidden to you.
+  </div>
+)
+
+const theme = createMuiTheme({
   palette: {
-    textColor: cyan500,
-  },
-  appBar: {
-    height: 50,
+    primary: {
+      light: '#819ca9',
+      main: '#546e7a',
+      dark: '#29434e',
+      contrastText: '#ffffff',
+    },
+    secondary: {
+      light: '#1976d2',
+      main: '#63a4ff',
+      dark: '#004ba0',
+      contrastText: '#ffffff',
+    },
   },
 });
 
+const AdminHelp = () => (
+  <div>
+      This is an admin hepl page;
+  </div>
+);
+
 class App extends React.Component {  
-  constructor(props) {
-    super(props);
-  }
   render() {
     let lang = this.props.lang ? this.props.lang : 'en';
-    addLocaleData([i18nConfig[lang]]);
+    addLocaleData([i18n[lang]]);
     return (
-      <MuiThemeProvider muiTheme={muiTheme}>
-        <IntlProvider locale={lang} messages={i18nConfig[lang].messages}>
+      <MuiThemeProvider theme={theme}>
+        <IntlProvider locale={lang} messages={i18n[lang].messages}>
         <div>
-          <NavigationBar />
           <BrowserRouter>
             <Switch>
               <Route exact path="/" component={HomePage} />
-              <Route path="/about" component={AboutPage} />
+              <Route path="/admin" component={authorize(["Administrator"])(AdminPage)} />
+              <Route path="/about" component={authorize(["Guest"])(AboutPage)}  />
+              <Route path="/forbidden" component={ForbiddenPage} />
               <Route component={NotFound} />
             </Switch>
           </BrowserRouter>
           <Footer />
-        </div>        
+        </div>
         </IntlProvider>
       </MuiThemeProvider>
     );
@@ -84,7 +80,8 @@ class App extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  lang: state.lang
+  lang: state.lang,
+  user: new TokenInfo(state.token)
 });
 
 export default connect(mapStateToProps)(App);
