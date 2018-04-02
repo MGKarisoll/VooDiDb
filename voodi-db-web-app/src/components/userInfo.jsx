@@ -1,5 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { FormattedMessage } from 'react-intl'
+import {Redirect} from 'react-router-dom';
+
 import IconButton from 'material-ui/IconButton';
 import Icon from 'material-ui/Icon';
 import Menu, { MenuItem } from 'material-ui/Menu';
@@ -25,48 +28,48 @@ class UserInfo extends React.Component {
         this.state = {
             anchorEl: null,
             open: false,
-        };
+        };        
+    }
 
-        this.handleClick = (event) => {
-            // This prevents ghost click.
-            event.preventDefault();
-            this.setState({
-                open: true,
-                anchorEl: event.currentTarget,
-            });
-        };
+    handleClick = (event) => {
+        // This prevents ghost click.
+        event.preventDefault();
+        this.setState({
+            open: true,
+            anchorEl: event.currentTarget,
+        });
+    };
 
-        this.handleRequestClose = () => {
-            this.setState({
-                open: false,
-            });
-        };
+    handleRequestClose = () => {
+        this.setState({
+            open: false,
+        });
+    };
 
-        this.setAnchor = (positionElement, position) => {
-            const {anchorOrigin} = this.state;
-            anchorOrigin[positionElement] = position;
+    setAnchor = (positionElement, position) => {
+        const {anchorOrigin} = this.state;
+        anchorOrigin[positionElement] = position;
 
-            this.setState({
-                anchorOrigin: anchorOrigin,
-            });
-        };
+        this.setState({
+            anchorOrigin: anchorOrigin,
+        });
+    };
 
-        this.onClickSighOut = () => {
-            this.props.signOut();
-        }
+    onClickSighOut = () => {
+        this.props.signOut();
+    }
 
-        this.setTarget = (positionElement, position) => {
-            const {targetOrigin} = this.state;
-            targetOrigin[positionElement] = position;
+    setTarget = (positionElement, position) => {
+        const {targetOrigin} = this.state;
+        targetOrigin[positionElement] = position;
 
-            this.setState({
-                targetOrigin: targetOrigin,
-            });
-        };    
-        
-        this.onClickHelp = () => {
-            document.location="/about";
-        }
+        this.setState({
+            targetOrigin: targetOrigin,
+        });
+    };    
+    
+    onClickHelp = () => {
+        document.location="/about";
     }
   
     render() {
@@ -88,23 +91,32 @@ class UserInfo extends React.Component {
         }
         return (
             <div>
-                    <IconButton
-                    aria-owns={anchorEl ? 'simple-menu' : null}
-                    aria-haspopup="true"
-                    onClick={this.handleClick}
-                    color="inherit"
-                    >
-                        <Icon>account_circle</Icon>
-                    </IconButton>
-                    <Menu
-                    id="simple-menu"
-                    anchorEl={anchorEl}
-                    open={this.state.open}
-                    onClose={this.handleRequestClose}
-                    >
-                    <MenuItem onClick={this.handleRequestClose}>Profile</MenuItem>
-                    <MenuItem onClick={this.handleRequestClose}>My account</MenuItem>
-                    </Menu>
+                { 
+                    this.props.user.isLogged 
+                    ?   <div>
+                            <IconButton
+                                aria-owns={anchorEl ? 'simple-menu' : null}
+                                aria-haspopup="true"
+                                onClick={this.handleClick}
+                                color="inherit"
+                            >
+                                <Icon>account_circle</Icon>
+                            </IconButton>
+                            <Menu
+                                id="simple-menu"
+                                anchorEl={anchorEl}
+                                open={this.state.open}
+                                onClose={this.handleRequestClose}
+                            >
+                                <MenuItem onClick={this.handleRequestClose}>Profile</MenuItem>
+                                <MenuItem onClick={(e) => { this.handleRequestClose(); this.props.signOut(); }}>
+                                    <FormattedMessage id="signout" defaultMessage="Sign out" />
+                                </MenuItem>
+                            </Menu>
+                        </div>
+                    : <Redirect to='/' />
+                 }
+                    
                 </div>
         )
     }

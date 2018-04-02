@@ -46,6 +46,7 @@ namespace VooDiDb.Api.Controllers {
             return this.Request.CreateResponse(HttpStatusCode.OK, this.userService.Create(model, login));
         }
 
+        [HttpPut]
         public HttpResponseMessage Put(long id, UserDTO model) {
             if(!this.User.TryClaimsUserIdentity(out var login))
                 return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, "User Identity is invalid.");

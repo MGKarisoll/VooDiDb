@@ -68,7 +68,11 @@ namespace VooDiDb.Infrastructure.Business {
         public UserDTO Update(UserDTO user, string login) {
             var currentUser = this.repository.FindBy(x => x.Login == login);
             if(currentUser.Role != UserRolesEnum.Administrator) throw new ArgumentException("User has no permissions to edit user.", nameof(login));
-            this.repository.Update(user.MapToUser());
+            var entryUser = this.repository.FindById(user.Id);
+            var updatingUser = user.MapToUser();
+            updatingUser.Password = entryUser.Password;
+            updatingUser.IsDeleted = entryUser.IsDeleted;
+            this.repository.Update(updatingUser);
             return this.repository.FindById(user.Id).MapToUserDTO();
         }
 

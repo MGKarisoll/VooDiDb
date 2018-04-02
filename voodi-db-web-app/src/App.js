@@ -11,9 +11,10 @@ import {blueGrey, lightBlue} from 'material-ui/colors';
 import './App.css';
 
 import Footer from './containers/footer.jsx';
-import HomePage from './pages/homePage.jsx';
-import AboutPage from './pages/aboutPage.jsx';
-import AdminPage from './pages/adminPage';
+import HomeIndexPage from './pages/home/index';
+import AccountSigninPage from './pages/account/signin';
+import AdminIndexPage from './pages/admin/index';
+import AboutPage from './pages/aboutPage';
 
 import authorize from './services/authorization';
 import TokenInfo from './models/tokenInfo';
@@ -64,8 +65,9 @@ class App extends React.Component {
         <div>
           <BrowserRouter>
             <Switch>
-              <Route exact path="/" component={HomePage} />
-              <Route path="/admin" component={authorize(["Administrator"])(AdminPage)} />
+              <Route exact path={HomeIndexPage.GetRoutePath()} component={authorize(["Administrator", "User"], AccountSigninPage.GetRoutePath())(HomeIndexPage)} />
+              <Route path={AccountSigninPage.GetRoutePath()} component={AccountSigninPage} />
+              <Route path="/admin" component={authorize(["Administrator"], AccountSigninPage.GetRoutePath())(AdminIndexPage)} />
               <Route path="/about" component={authorize(["Guest"])(AboutPage)}  />
               <Route path="/forbidden" component={ForbiddenPage} />
               <Route component={NotFound} />

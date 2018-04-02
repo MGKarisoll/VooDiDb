@@ -1,5 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import {Redirect} from 'react-router-dom';
 
 import { withStyles } from 'material-ui/styles';
 import AppBar from 'material-ui/AppBar';
@@ -10,9 +11,9 @@ import Menu, { MenuItem } from 'material-ui/Menu';
 import Icon from 'material-ui/Icon';
 
 import LoginForm from '../components/loginForm';
-import UserInfo from '../components/userInfo.jsx';
-import TokenInfo from '../models/tokenInfo.js';
-
+import UserInfo from '../components/userInfo';
+import TokenInfo from '../models/tokenInfo';
+import AccountSigninPage from '../pages/account/signin';
 
 
 class NavigationBar extends React.Component {
@@ -44,9 +45,9 @@ class NavigationBar extends React.Component {
               <Icon>menu</Icon>
             </IconButton>
             <Typography variant="title" color="inherit" style={styles.flex}>
-              Title
+              {this.props.title ? this.props.title : 'Title'}
             </Typography>
-            {this.props.user.isLogged ? <UserInfo /> : <LoginForm/>}
+              {this.props.user.isLogged ? <UserInfo /> : <Redirect to={AccountSigninPage.GetRoutePath()} />}
           </Toolbar>
         </AppBar>
         );

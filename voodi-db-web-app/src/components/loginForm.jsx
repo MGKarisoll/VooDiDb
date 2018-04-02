@@ -1,5 +1,6 @@
 import React from 'react';
-import { connect } from 'react-redux'
+import { Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 
 import TokenInfo from '../models/tokenInfo.js';
@@ -26,7 +27,8 @@ class LoginForm extends React.Component {
         this.state = {
             open: false,
             isLoading: false,
-            isError: false
+            isError: false,
+            success: false,
         };
 
         this.handleOpen = () => {
@@ -80,8 +82,7 @@ class LoginForm extends React.Component {
                     this.setState({isLoading: false, open: false});
                     this.props.signIn(response.access_token);
                     var tokenInfo = new TokenInfo(response.access_token);
-                    if(tokenInfo.role === "Administrator") document.location = "/admin";
-                    this.setState({isLoading : false});
+                    this.setState({isLoading : false, success: true});
                 });
     
         }
@@ -113,46 +114,51 @@ class LoginForm extends React.Component {
             }
         }
         return (
-            <div>
-                <Button color="inherit"
-                    children={
-                        <FormattedMessage id="signin" defaultMessage={'sign in'}/>
-                    }
-                    onClick={this.handleOpen}/>
-                <Dialog
-                    fullScreen={fullScreen}
-                    open={this.state.open}
-                    onClose={this.handleClose}
-                    aria-labelledby="responsive-dialog-title"
-                    >
-                    <DialogTitle id="responsive-dialog-title" style={style.dialogTitle}>
-                        <FormattedMessage id="signing" defaultMessage="Signing" />
-                    </DialogTitle>
-                    <DialogContent>
-                        <form onSubmit={this.handleSubmit} >
-                            <TextField autoFocus margin="dense" id="login_form-login" label={
-                                <FormattedMessage id="login" defaultMessage="Login" />
-                            } type="text" fullWidth onChange={this.onChangeLogin}
-                            disabled={this.state.isLoading} />
-                            <TextField margin="dense" id="login_form-password" label={
-                                <FormattedMessage id="password" defaultMessage="Password" />
-                            } type="password" fullWidth onChange={this.onChangePassword}
-                            disabled={this.state.isLoading} />
-                            <Button type="reset" onClick={this.handleClose} color="primary" fullWidth  disabled={this.state.isLoading}>
-                                <FormattedMessage id="cancel" defaultMessage="Cancel" />
-                            </Button>
-                            <br/>
-                            <Button variant="raised" type="submit" color="secondary" fullWidth  disabled={this.state.isLoading} >
-                                <FormattedMessage id="signin" defaultMessage="Sign in" />
-                            </Button>
-                            <div style={style.loader}>
-                                <LinearProgress />
-                            </div>
-                        </form>
-                        
-                    </DialogContent>
-                </Dialog>
-            </div>
+            this.state.success
+            ?   <div>
+                    <Button color="inherit"
+                        children={
+                            <FormattedMessage id="signin" defaultMessage={'sign in'}/>
+                        }
+                        onClick={this.handleOpen}/>
+                    <Dialog
+                        fullScreen={fullScreen}
+                        open={this.state.open}
+                        onClose={this.handleClose}
+                        aria-labelledby="responsive-dialog-title"
+                        >
+                        <DialogTitle id="responsive-dialog-title" style={style.dialogTitle}>
+                            <FormattedMessage id="signing" defaultMessage="Signing" />
+                        </DialogTitle>
+                        <DialogContent>
+                            <form onSubmit={this.handleSubmit} >
+                                <TextField autoFocus margin="dense" id="login_form-login" label={
+                                    <FormattedMessage id="login" defaultMessage="Login" />
+                                } type="text" fullWidth onChange={this.onChangeLogin}
+                                disabled={this.state.isLoading} />
+                                <TextField margin="dense" id="login_form-password" label={
+                                    <FormattedMessage id="password" defaultMessage="Password" />
+                                } type="password" fullWidth onChange={this.onChangePassword}
+                                disabled={this.state.isLoading} />
+                                <Button type="reset" onClick={this.handleClose} color="primary" fullWidth  disabled={this.state.isLoading}>
+                                    <FormattedMessage id="cancel" defaultMessage="Cancel" />
+                                </Button>
+                                <br/>
+                                <Button variant="raised" type="submit" color="secondary" fullWidth  disabled={this.state.isLoading} >
+                                    <FormattedMessage id="signin" defaultMessage="Sign in" />
+                                </Button>
+                                <div style={style.loader}>
+                                    <LinearProgress />
+                                </div>
+                            </form>
+                            
+                        </DialogContent>
+                    </Dialog>
+                </div>
+            : <Redirect to={
+                this.props.user.role 
+                ? (this.props.user.role === 'Administrator' ? '/admin' : '/')
+                : '/'} />
         )
     }
 }

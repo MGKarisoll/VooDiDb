@@ -3,24 +3,24 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import TokenInfo from '../models/tokenInfo';
 
-export const Authorization = (allowedRoles) =>
+export const Authorization = (allowedRoles, redirectPath) =>
     (WrappedComponent) => {
         class WithAuthorization extends React.Component {
-            render(){                
+            render() {          
+                console.log(redirectPath)      ;
                 const userHasAllowedRole = allowedRoles.indexOf(this.props.user.role) > -1;
                 const userLoggedIn = this.props.user.isLogged;
                 //const userHasAllowedRole = _.intersection(allowedRoles, this.props.user.roles).length;
 
-                if (userHasAllowedRole) {
-                    if(userLoggedIn) {
-                        return <WrappedComponent {...this.props}/>;
+                if(userLoggedIn) {
+                    if (userHasAllowedRole) {
+                        return <WrappedComponent {...this.props}/>;                    
                     } else {
-                        return <Redirect to='/' />
+                        return <Redirect to={redirectPath ? redirectPath : "/forbidden"}/>
                     }
-                    
                 } else {
-                    return <Redirect to="/forbidden"/>
-                }
+                    return <Redirect to={redirectPath ? redirectPath : "/forbidden"} />
+                }                
             }
         }
 

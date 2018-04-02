@@ -42,7 +42,7 @@ namespace VooDiDb.Services.Core.MappingExtensions {
         public static User MapToUser(this UserRegistrationDTO dto) {
             return new User {
                 Login = dto.Login,
-                Password = Security.GetMd5HashString(dto.Password),
+                Password = string.IsNullOrEmpty(dto.Password) ? string.Empty : Security.GetMd5HashString(dto.Password),
                 DepartmentId = dto.DepartmentId,
                 PostId = dto.PostId,
                 Role = dto.Role

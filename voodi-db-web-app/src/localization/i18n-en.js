@@ -1,10 +1,16 @@
 const i18nEn = {
   locale: 'en',
   messages: {
-    "button.cancel": "Cancel",
-    "button.signin": "Sign in",
-    "title.signin": "Sirning",
-    "page.admin.title": "Administrator"
+    "admin.title": "Administrator",
+    "cancel": "Cancel",
+    "fullname": "Full name",
+    "login": "Login",
+    "name": "Name",
+    "password": "Password",
+    "save": "Save",
+    "signin": "Sign in",
+    "signing": "Signing",
+    "signout": "Sign out",
   },
   pluralRuleFunction: function() { return ""; }
 };

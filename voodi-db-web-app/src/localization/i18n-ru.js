@@ -1,12 +1,16 @@
 const i18nRu = {
     locale: 'ru',
     messages: {
+      "admin.title": "Администратор",
       "cancel": "Отмена",
+      "fullname": "Ф.И.О.",
+      "login": "Логин",
+      "name": "Имя",
+      "password": "Пароль",
+      "save": "Сохранить",
       "signin": "Войти",
       "signing": "Вход",
-      "login": "Логин",
-      "password": "Пароль",
-      "admin.title": "Администратор"
+      "signout": "Выйти",
     },
     pluralRuleFunction: function() { return ""; }
 };
