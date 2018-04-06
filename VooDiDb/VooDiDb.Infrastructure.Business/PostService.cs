@@ -27,7 +27,7 @@ namespace VooDiDb.Infrastructure.Business {
             try {
                 var user = this.userRepository.FindBy(x => x.Login == login && !x.IsDeleted);
                 if(user == null) return null;
-                return user.Role == UserRolesEnum.Administrator
+                return user.Role == UserRoles.ADMINISTRATOR
                     ? this.repository.FindById(id).MapToPostDTO()
                     : this.repository.FindBy(x => x.Id == id && !x.IsDeleted).MapToPostDTO();
             } catch(Exception exception) {
@@ -42,10 +42,10 @@ namespace VooDiDb.Infrastructure.Business {
                 if(user == null) return new PostDTO[] { };
                 IQueryable<Post> query;
                 switch(user.Role) {
-                    case UserRolesEnum.Administrator:
+                    case UserRoles.ADMINISTRATOR:
                         query = this.repository.GetAll();
                         break;
-                    case UserRolesEnum.User:
+                    case UserRoles.USER:
                         query = this.repository.GetAll(x => !x.IsDeleted);
                         break;
                     default:
@@ -65,10 +65,10 @@ namespace VooDiDb.Infrastructure.Business {
                 if(user == null) return new UserDTO[] { };
                 IQueryable<User> query;
                 switch(user.Role) {
-                    case UserRolesEnum.Administrator:
+                    case UserRoles.ADMINISTRATOR:
                         query = this.userRepository.GetAll(x => x.PostId == postId);
                         break;
-                    case UserRolesEnum.User:
+                    case UserRoles.USER:
                         query = this.userRepository.GetAll(x => x.PostId == postId && !x.IsDeleted);
                         break;
                     default:
@@ -86,7 +86,7 @@ namespace VooDiDb.Infrastructure.Business {
             try {
                 var user = this.userRepository.FindBy(x => x.Login == login && !x.IsDeleted);
                 if(user == null) throw new ArgumentException("User has no permissions to add new post.", nameof(login));
-                if(user.Role != UserRolesEnum.Administrator) throw new ArgumentException("User has no permissions to add new post.", nameof(login));
+                if(user.Role != UserRoles.ADMINISTRATOR) throw new ArgumentException("User has no permissions to add new post.", nameof(login));
 
                 return this.repository.Insert(model.MapToPost()).MapToPostDTO();
             } catch(Exception exception) {
@@ -99,7 +99,7 @@ namespace VooDiDb.Infrastructure.Business {
             try {
                 var user = this.userRepository.FindBy(x => x.Login == login && !x.IsDeleted);
                 if(user == null) throw new ArgumentException("User has no permissions to edit post.", nameof(login));
-                if(user.Role != UserRolesEnum.Administrator) throw new ArgumentException("User has no permissions to edit post.", nameof(login));
+                if(user.Role != UserRoles.ADMINISTRATOR) throw new ArgumentException("User has no permissions to edit post.", nameof(login));
 
                 return this.repository.Update(model.MapToPost()).MapToPostDTO();
             } catch(Exception exception) {
@@ -112,7 +112,7 @@ namespace VooDiDb.Infrastructure.Business {
             try {
                 var user = this.userRepository.FindBy(x => x.Login == login && !x.IsDeleted);
                 if(user == null) throw new ArgumentException("User has no permissions to delete post.", nameof(login));
-                if(user.Role != UserRolesEnum.Administrator) throw new ArgumentException("User has no permissions to delete post.", nameof(login));
+                if(user.Role != UserRoles.ADMINISTRATOR) throw new ArgumentException("User has no permissions to delete post.", nameof(login));
 
                 var entry = this.repository.FindById(id);
                 if(entry == null) throw new ArgumentException("Post not found.", nameof(id));

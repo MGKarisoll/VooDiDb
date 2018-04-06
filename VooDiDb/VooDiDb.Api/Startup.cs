@@ -20,26 +20,21 @@ using VooDiDb.Services.Interfaces;
 namespace VooDiDb.Api {
     public class Startup {
         public void Configuration(IAppBuilder app) {
+            var container = new WindsorContainer().Install(new AppWindsorInstaller());
+
             var config = new HttpConfiguration();
-            var container = new WindsorContainer();
-
-            config.DependencyResolver = new WindsorDependencyResolver(container);
             config.MapHttpAttributeRoutes();
+            config.Routes.MapHttpRoute(
+                "DefaultApi",
+                "api/{controller}/{id}",
+                new { id = RouteParameter.Optional }
+            );
 
-            container.Install(new AppWindsorInstaller());
-            container.Kernel.Resolver.AddSubResolver(new CollectionResolver(container.Kernel, true));
-
-            // Web API routes
-            GlobalConfiguration.Configure(WebApiConfig.Register);
-            GlobalConfiguration.Configuration.Services.Replace(
-                typeof(IHttpControllerActivator),
-                new WindsorHttpControllerActivator(container));
-
+            app.UseCors(CorsOptions.AllowAll);
             this.ConfigureOAuthServer(app, container);
             this.ConfigureOAuthClient(app);
-
+            config.DependencyResolver = new WindsorHttpDependencyResolver(container);
             app.UseWebApi(config);
-            app.UseCors(CorsOptions.AllowAll);
         }
 
         public void ConfigureOAuthServer(IAppBuilder app, IWindsorContainer container) {

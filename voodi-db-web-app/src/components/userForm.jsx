@@ -1,5 +1,4 @@
-import axios from 'axios';
-import React, {Component} from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl'
 
@@ -13,12 +12,11 @@ import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
 import Icon from 'material-ui/Icon';
 import Grid from 'material-ui/Grid';
-import Select from 'material-ui/Select';
-import { MenuItem } from 'material-ui/Menu';
 
-import config from '../app.config.json';
 import TokenInfo from '../models/tokenInfo';
-import DepartmentTreeSelector from './departmentTreeSelector';
+import DepartmentSelect from './departmentSelect';
+import Request from '../services/request';
+import PostSelect from './postSelect';
 
 const styles = {
     appBar: {
@@ -37,60 +35,6 @@ class UserForm extends React.Component {
             userData: this.props.userData,
             selectOpen: false,
             age: '',
-            tree: [
-                {
-                    id: 1,
-                    title: "node-1",
-                    open: false,
-                    hidden: false,
-                    children: [
-                        { 
-                            id: 2,
-                            title: "node-1-1",
-                            open: false,
-                            hidden: false,
-                            children: [
-                                {
-                                    id: 3,
-                                    title: "node-1-1-1",
-                                    open: false,
-                                    hidden: false,
-                                    children:[]
-                                },
-                                {
-                                    id: 4,
-                                    title: "node-1-1-2",
-                                    open: false,
-                                    hidden: false,
-                                    children:[]
-                                }
-                            ]
-                        },
-                        { 
-                            id: 5,
-                            title: "node-1-2",
-                            open: false,
-                            hidden: false,
-                            children: [
-                                {
-                                    id: 6,
-                                    title: "node-1-2-1",
-                                    open: false,
-                                    hidden: false,
-                                    children:[]
-                                },
-                                {
-                                    id: 7,
-                                    title: "node-1-2-3",
-                                    open: false,
-                                    hidden: false,
-                                    children:[]
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
         }
     }
 
@@ -98,30 +42,16 @@ class UserForm extends React.Component {
         this.props.closeCallback();
     }
 
-    handleSave = () => {
-        try{
-            var url = config.server.host + '/api/users/' + this.state.userData.Id;
-            var headers = {
-                'Accept': 'application/json',
-                'Authorization': 'Bearer ' + this.props.token,
-                'Content-Type': 'application/json',
-            };
-            var body = JSON.stringify(this.state.userData)
-            var request = {
-                headers: headers,
-                data: body
-            }
-
-            axios({
-                method: 'put',
-                url: url,
-                data: this.state.userData,
-                headers: headers
-            }).then(response=>{
-                console.log(response.data)
-            });                
-        } catch(exception) {
-            console.log(exception);
+    handleSave = async () => {
+        try{             
+            var response = this.state.userData.Id > 0 
+                ? await Request.put(`/api/users/${this.state.userData.Id}`, this.state.userData)
+                : await Request.post(`/api/users`, this.state.userData);
+            this.setState({
+                userData: response
+            })
+        } catch(error) {
+            console.log(error);
         }
         this.props.closeCallback();
         this.props.saveCallback(this.state.userData);
@@ -140,9 +70,6 @@ class UserForm extends React.Component {
             selectOpen: false,
             age: node.title
         });
-
-        console.log(node);
-        console.log(this.state);
     }
 
     openSelect = () => {
@@ -151,12 +78,13 @@ class UserForm extends React.Component {
         });
     }
 
-    handleChange = (e) => {
-        console.log(e);
+    handleChange = event => {
+        this.setState({ [event.target.name]: event.target.value });
     }
 
     render() {
         const { classes } = this.props;
+        const { userData } = this.state;
         const style = {
             formContainer: {
                 position: 'relative',
@@ -176,46 +104,70 @@ class UserForm extends React.Component {
                             <Typography variant="title" color="inherit" className={classes.flex}>
                                 {this.state.userData.Login}
                             </Typography>
-                            <Button color="inherit" onClick={this.handleSave}>
-                                <FormattedMessage id="save" defaultMessage="Save" />
-                            </Button>
+                            {
+                                userData.Role === "Administrator"
+                                ?   ''
+                                :   <Button color="inherit" onClick={this.handleSave}>
+                                        <FormattedMessage id="save" defaultMessage="Save" />
+                                    </Button>
+                            }
+                            
                         </Toolbar>
                     </AppBar>                 
                     
                     <Grid container spacing={0}>
                         <Grid item xs={1} sm={3} />
                         <Grid item xs={10} sm={6} >
-                            <FormControl fullWidth className={classes.formControl} error aria-describedby="user-form-name">
+                            <br/>
+                            {
+                                userData.Id === 0
+                                ?   <FormControl fullWidth className={classes.formControl} error={!userData.Login} disabled={userData.Role==="Administrator"} aria-describedby="user-form-login">
+                                        <InputLabel htmlFor="user-form-login">
+                                            <FormattedMessage id="login" defaultMessage="Login" /> *
+                                        </ InputLabel>
+                                        <Input id="user-form-login" value={this.state.userData.Login} onChange={this.handleInput('Login')} />
+                                        {
+                                            userData.Login
+                                            ?   ''
+                                            :   <FormHelperText id="login-error-text">
+                                                    <FormattedMessage id="login-is-required" defaultMessage="User's login is required" />
+                                                </FormHelperText>
+                                        }                                
+                                    </FormControl>
+                                :   ''
+                            }                            
+                            <br/>
+                            <FormControl fullWidth className={classes.formControl} error={!userData.Name} disabled={userData.Role==="Administrator"} aria-describedby="user-form-name">
                                 <InputLabel htmlFor="user-form-name">
-                                    <FormattedMessage id="name" defaultMessage="UserName" />
+                                    <FormattedMessage id="name" defaultMessage="UserName" /> *
                                 </ InputLabel>
                                 <Input id="user-form-name" value={this.state.userData.Name} onChange={this.handleInput('Name')} />
-                                <FormHelperText id="user-form-name-error">Error</FormHelperText>
+                                {
+                                    userData.Name
+                                    ?   ''
+                                    :   <FormHelperText id="name-error-text">
+                                            <FormattedMessage id="name-is-required" defaultMessage="User's name is required" />
+                                        </FormHelperText>
+                                }                                
                             </FormControl>
                             <br />
-                            <FormControl fullWidth className={classes.formControl} error aria-describedby="user-form-fullname">
+                            <FormControl fullWidth className={classes.formControl} error={!userData.FullName} disabled={userData.Role==="Administrator"} aria-describedby="user-form-fullname">
                                 <InputLabel htmlFor="user-form-fullname">
-                                    <FormattedMessage id="fullname" defaultMessage="fullname" />
+                                    <FormattedMessage id="fullname" defaultMessage="fullname" /> *
                                 </ InputLabel>
                                 <Input id="user-form-fullname" value={this.state.userData.FullName} onChange={this.handleInput('FullName')} />
-                                <FormHelperText id="user-form-fullname-error-text">Error</FormHelperText>
+                                {
+                                    userData.FullName
+                                    ?   ''
+                                    :   <FormHelperText id="fullname-error-text">
+                                            <FormattedMessage id="fullname-is-required" defaultMessage="User's full name is required" />
+                                        </FormHelperText>
+                                }                                
                             </FormControl>
                             <br/>
-                            <FormControl fullWidth className={classes.formControl}>
-                                <InputLabel htmlFor="age-simple">Age</InputLabel>
-                                <Select
-                                    open={this.state.selectOpen}
-                                    onOpen={this.openSelect}
-                                    onChange={this.handleChange}
-                                    value={this.state.age}
-                                    inputProps={{
-                                    name: 'age',
-                                    id: 'age-simple',
-                                    }}
-                                >
-                                    <DepartmentTreeSelector nodes={this.state.tree} onConfirm={this.handleConfirmTreeSelect} />
-                                </Select>
-                            </FormControl>
+                            <DepartmentSelect name="DepartmentId" id="user-form-department" value={this.state.userData.DepartmentId} disabled={userData.Role==="Administrator"} onChange={this.handleInput('DepartmentId')} />
+                            <br/>
+                            <PostSelect name="PostId" id="user-form-post" value={this.state.userData.PostId} disabled={userData.Role==="Administrator"} onChange={this.handleInput('PostId')} />
                         </ Grid>
                         <Grid item xs={1} sm={3} />
                     </Grid>

@@ -40,7 +40,7 @@ namespace VooDiDb.Api.OAuth {
         }
 
         public override Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context) {
-            context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "*" });
+            //context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "*" });
             var user = this.userService.LogIn(new UserLoginDTO { Login = context.UserName, Password = context.Password });
             if(user == null) {
                 context.SetError("invalid_grant", "The user name or password is incorrect");

@@ -2,15 +2,12 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {Redirect} from 'react-router-dom';
 
-import { withStyles } from 'material-ui/styles';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
-import Menu, { MenuItem } from 'material-ui/Menu';
 import Icon from 'material-ui/Icon';
 
-import LoginForm from '../components/loginForm';
 import UserInfo from '../components/userInfo';
 import TokenInfo from '../models/tokenInfo';
 import AccountSigninPage from '../pages/account/signin';
@@ -25,7 +22,6 @@ class NavigationBar extends React.Component {
     }    
 
     render() {
-        const { auth, anchorEl } = this.state;
         const styles = {
             root: {
               flexGrow: 1,

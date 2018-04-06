@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 
 
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
-import {blueGrey, lightBlue} from 'material-ui/colors';
 
 
 import './App.css';
@@ -47,13 +46,15 @@ const theme = createMuiTheme({
       contrastText: '#ffffff',
     },
   },
+  overrides: {
+    MuiList: {
+      padding: {
+        paddingTop: 0,
+        paddingBottom: 0
+      }
+    }
+  }
 });
-
-const AdminHelp = () => (
-  <div>
-      This is an admin hepl page;
-  </div>
-);
 
 class App extends React.Component {  
   render() {

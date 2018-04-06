@@ -1,9 +1,9 @@
 ﻿namespace VooDiDb.Domain.Core
 {
-    public enum UserRolesEnum
+    public class UserRoles
     {
-        Administrator = 1,
-        User = 2,
-        Guest = 4
+        public const string ADMINISTRATOR = "Administrator";
+        public const string USER = "User";
+        public const string GUEST = "Guest";
     }
 }

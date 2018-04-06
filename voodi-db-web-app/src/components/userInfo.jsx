@@ -6,7 +6,6 @@ import {Redirect} from 'react-router-dom';
 import IconButton from 'material-ui/IconButton';
 import Icon from 'material-ui/Icon';
 import Menu, { MenuItem } from 'material-ui/Menu';
-import Divider from 'material-ui/Divider';
 
 import TokenInfo from '../models/tokenInfo.js';
 import { signIn, signOut } from '../actions/loginActions.js';
@@ -74,21 +73,6 @@ class UserInfo extends React.Component {
   
     render() {
         const { anchorEl } = this.state;
-        const style = {
-            userName: {
-
-            },
-            userDepartment: {
-            display: 'block',
-            lineHeight: '30px',
-            color: '#737373'
-            },
-            userPost: {
-            display: 'block',
-            lineHeight: '26px',
-            color: '#737373'
-            }
-        }
         return (
             <div>
                 { 

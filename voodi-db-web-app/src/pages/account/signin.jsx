@@ -5,21 +5,12 @@ import { FormattedMessage } from 'react-intl';
 
 import TokenInfo from '../../models/tokenInfo.js';
 import {signIn, signOut} from '../../actions/loginActions.js';
-import config from '../../app.config.json';
+import Request from '../../services/request';
 
 import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
 import { LinearProgress  } from 'material-ui/Progress';
-import IconButton from 'material-ui/IconButton';
-import Icon from 'material-ui/Icon';
 import Paper from 'material-ui/Paper';
-import Dialog, {
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-    withMobileDialog,
-  } from 'material-ui/Dialog';
 
 class AccountSigninPage extends React.Component {
     static GetRoutePath = () => '/account/signin';
@@ -37,53 +28,26 @@ class AccountSigninPage extends React.Component {
         };
     }
 
-    handleSubmit = (e) => {
-        e.preventDefault();        
-        this.setState({isLoading:true});
+    handleSubmit = async (e) => {
+        const { login, password } = this.state;
+        const { signIn } = this.props;
+        try{
+            e.preventDefault();        
+            this.setState({isLoading:true});
 
 
-        if (!this.state.login || !this.state.password) {
-            return;
-        }
-
-        const toFormBody = (params) => {
-            var formBody = [];
-            for (var property in params) {
-                var encodedKey = encodeURIComponent(property);
-                var encodedValue = encodeURIComponent(params[property]);
-                formBody.push(encodedKey + "=" + encodedValue);
+            if (!login || !password) {
+                return;
             }
-            formBody = formBody.join("&");
-            return formBody;
-        }
 
-        
+            var response = await Request.login(login, password);
+            this.setState({isLoading: false, open: false});
 
-        const request = {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type':'application/x-www-form-urlencoded;'
-            },
-            body: toFormBody({
-                    username: this.state.login,
-                    password: this.state.password,
-                    grant_type: 'password',
-                    client_id: config.server.clientId
-                })
-        }
-
-        fetch(config.server.host + config.server.auth, request)
-            .catch(error => console.log('bad request', error))
-            .then(response => response.json())
-            .then(response => {
-                console.log(response);
-                this.setState({isLoading: false, open: false});
-                this.props.signIn(response.access_token);
-                var tokenInfo = new TokenInfo(response.access_token);
-                this.setState({isLoading : false, success: true});
-            });
-
+            signIn(response.access_token);
+            this.setState({isLoading : false, success: true, user: new TokenInfo(response.access_token)});
+        } catch(error) {
+            console.log(error);
+        }        
     }
 
     onChangeLogin = (e) => {

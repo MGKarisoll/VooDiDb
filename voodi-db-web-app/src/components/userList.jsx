@@ -5,21 +5,15 @@ import { connect } from 'react-redux';
 import config from '../app.config.json';
 import TokenInfo from '../models/tokenInfo';
 import UserForm from './userForm';
+import Request from '../services/request'
 
-import { withStyles, createMuiTheme, withTheme } from 'material-ui/styles';
-import Button from 'material-ui/Button';
+import { withTheme } from 'material-ui/styles';
 import Icon from 'material-ui/Icon';
 import { Paper, IconButton } from 'material-ui';
 import Checkbox from 'material-ui/Checkbox';
 import {List, ListItem, ListItemSecondaryAction, ListItemText } from 'material-ui';
 import { LinearProgress  } from 'material-ui/Progress';
-import Dialog, {
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-  } from 'material-ui/Dialog';
-  import TextField from 'material-ui/TextField';
+import Dialog from 'material-ui/Dialog';
 
 class UserList extends React.Component {
     constructor(props) {
@@ -35,8 +29,6 @@ class UserList extends React.Component {
         }
 
         this.getUsers = this.getUsers.bind(this);
-        // this.handleOpenUserFormDialog = this.handleOpenUserFormDialog.bind(this);
-        // this.handleCloseUserFormDialog = this.handleCloseUserFormDialog.bind(this);
     }
 
     getUsers = () => {
@@ -71,7 +63,6 @@ class UserList extends React.Component {
     
             var url = config.server.host + '/api/users/' + id;
             try {
-                console.log(url);
                 axios
                     .get(url, request)
                     .then(response => {
@@ -105,6 +96,14 @@ class UserList extends React.Component {
     componentDidMount() {
         this.getUsers();
     }
+
+    handleToggle = async data => {
+        data.IsActive = !data.IsActive;
+        var response = await Request.put(`/api/users/${data.Id}`, data);
+        this.getUsers();
+        // var response = await Request.put(`/api/users/${data.Id}`, data);
+        // this.getUsers();        
+    }
     
     render() {
         const style = {
@@ -134,13 +133,11 @@ class UserList extends React.Component {
             }
         }
 
-        const { classes } = this.props
-        const self = this;
         return(
             <div>
                 <Paper>
                     <div style={style.toolbar}>
-                        <IconButton onClick={this.getUsers}>
+                        <IconButton onClick={e => this.handleOpenUserFormDialog(0)}>
                             <Icon>add</Icon>
                         </IconButton>
                         <IconButton onClick={this.getUsers}>
@@ -153,15 +150,14 @@ class UserList extends React.Component {
                     <div style={style.container}>
                         <List style={{width: '100%', maxHeight: '240px', overflowY: 'auto'}}>
                             {
-                                this.state.users.map(function(item,key) {
+                                this.state.users.map((item,key) => {
                                         return (
-                                            <ListItem key={key} button onClick={ (e) => self.handleOpenUserFormDialog(item.Id)} >
+                                            <ListItem key={key} button onClick={ (e) => this.handleOpenUserFormDialog(item.Id)} >
                                                 <ListItemText primary={item.FullName} />
                                                 <ListItemSecondaryAction>
-                                                    <Checkbox
-                                                    // onChange={this.handleToggle(value)}
-                                                    // checked={this.state.checked.indexOf(value) !== -1}
-                                                    checked={item.IsActive}
+                                                    <Checkbox disabled={item.Role === "Administrator"}
+                                                        onChange={(e) => this.handleToggle(item)}
+                                                        checked={item.IsActive}
                                                     />
                                                 </ListItemSecondaryAction>
                                             </ListItem>

@@ -24,7 +24,7 @@ namespace VooDiDb.Services.Core {
         public string FullName { get; set; }
         public long DepartmentId { get; set; }
         public long PostId { get; set; }
-        public UserRolesEnum Role { get; set; }
+        public string Role { get; set; }
     }
 
     public class UserDTO : UserBaseDTO {
@@ -33,7 +33,7 @@ namespace VooDiDb.Services.Core {
         public string FullName { get; set; }
         public long DepartmentId { get; set; }
         public long PostId { get; set; }
-        public UserRolesEnum Role { get; set; }
+        public string Role { get; set; }
         public bool IsActive { get; set; }
         public int SortOrder { get; set; }
         public byte[] RowVersion { get; set; }

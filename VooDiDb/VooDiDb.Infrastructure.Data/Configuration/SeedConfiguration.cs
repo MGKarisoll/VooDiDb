@@ -44,7 +44,7 @@ namespace VooDiDb.Infrastructure.Data.Configuration
                     Name = "Admin",
                     Password = Security.GetMd5HashString("admin13"),
                     PostId = 1,
-                    Role = UserRolesEnum.Administrator,
+                    Role = UserRoles.ADMINISTRATOR,
                     SortOrder = 0
                 });
         }

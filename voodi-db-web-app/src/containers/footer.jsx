@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import { changeLang } from '../actions/langActions.js';
-import { MuiThemeProvider, createMuiTheme, getMuiTheme } from 'material-ui/styles';
 
 class Footer extends React.Component {
 

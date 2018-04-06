@@ -20,7 +20,7 @@ namespace VooDiDb.Infrastructure.Business {
 
         public UserDTO Create(UserRegistrationDTO userRegistrationDTO, string login) {
             try {
-                if(this.repository.FindBy(x => x.Login == login).Role != UserRolesEnum.Administrator)
+                if(this.repository.FindBy(x => x.Login == login).Role != UserRoles.ADMINISTRATOR)
                     throw new ArgumentException("User has no permissions to add new user.", nameof(login));
 
                 var user = userRegistrationDTO.MapToUser();
@@ -37,10 +37,10 @@ namespace VooDiDb.Infrastructure.Business {
             var currentUser = this.repository.FindBy(x => x.Login == login);
             IQueryable<User> query;
             switch(currentUser.Role) {
-                case UserRolesEnum.Administrator:
+                case UserRoles.ADMINISTRATOR:
                     query = this.repository.GetAll();
                     break;
-                case UserRolesEnum.User:
+                case UserRoles.USER:
                     query = this.repository.GetAll(x => !x.IsDeleted);
                     break;
                 default:
@@ -53,7 +53,17 @@ namespace VooDiDb.Infrastructure.Business {
         public UserDTO Get(long id, string login) {
             var currentUser = this.repository.FindBy(x => x.Login == login);
             if(currentUser == null) return null;
-            if(currentUser.Role == UserRolesEnum.Administrator) return this.repository.FindById(id).MapToUserDTO();
+            if(currentUser.Role == UserRoles.ADMINISTRATOR) {
+                if (id == 0)
+                    return new User
+                    {
+                        PostId = 1,
+                        Role = UserRoles.USER,
+                        DepartmentId = 1
+                    }.MapToUserDTO();
+
+                return this.repository.FindById(id).MapToUserDTO();
+            }
             return this.repository.FindBy(x => x.Id == id && !x.IsDeleted).MapToUserDTO();
         }
 
@@ -67,18 +77,17 @@ namespace VooDiDb.Infrastructure.Business {
 
         public UserDTO Update(UserDTO user, string login) {
             var currentUser = this.repository.FindBy(x => x.Login == login);
-            if(currentUser.Role != UserRolesEnum.Administrator) throw new ArgumentException("User has no permissions to edit user.", nameof(login));
+            if(currentUser.Role != UserRoles.ADMINISTRATOR) throw new ArgumentException("User has no permissions to edit user.", nameof(login));
             var entryUser = this.repository.FindById(user.Id);
             var updatingUser = user.MapToUser();
             updatingUser.Password = entryUser.Password;
-            updatingUser.IsDeleted = entryUser.IsDeleted;
             this.repository.Update(updatingUser);
             return this.repository.FindById(user.Id).MapToUserDTO();
         }
 
         public int Delete(long userId, string login) {
             var currentUser = this.repository.FindBy(x => x.Login == login);
-            if(currentUser.Role != UserRolesEnum.Administrator) throw new ArgumentException("User has no permissions to delete user.", nameof(login));
+            if(currentUser.Role != UserRoles.ADMINISTRATOR) throw new ArgumentException("User has no permissions to delete user.", nameof(login));
             var entry = this.repository.FindById(userId);
             entry.IsDeleted = true;
             return this.repository.Update(entry) == null ? 0 : 1;

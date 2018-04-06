@@ -2,17 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http.Dependencies;
-using Castle.MicroKernel.Lifestyle;
 using Castle.Windsor;
 
 namespace VooDiDb.Api.WindsorConfig {
-    public class WindsorDependencyScope : IDependencyScope {
+    public class WindsorHttpDependencyResolver : IDependencyResolver {
         private readonly IWindsorContainer container;
-        private readonly IDisposable scope;
 
-        public WindsorDependencyScope(IWindsorContainer container) {
+        public WindsorHttpDependencyResolver(IWindsorContainer container) {
             this.container = container ?? throw new ArgumentNullException(nameof(container));
-            this.scope = container.BeginScope();
         }
 
         public object GetService(Type t) {
@@ -26,8 +23,10 @@ namespace VooDiDb.Api.WindsorConfig {
                        .Cast<object>().ToArray();
         }
 
-        public void Dispose() {
-            this.scope.Dispose();
+        public IDependencyScope BeginScope() {
+            return new WindsorDependencyScope(this.container);
         }
+
+        public void Dispose() { }
     }
 }

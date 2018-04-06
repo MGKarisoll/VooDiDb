@@ -53,6 +53,10 @@
     <Compile Include="Migrations\201803221217241_AudienceIsActivePropertyAdded.Designer.cs">
       <DependentUpon>201803221217241_AudienceIsActivePropertyAdded.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804061419078_user_role.cs" />
+    <Compile Include="Migrations\201804061419078_user_role.Designer.cs">
+      <DependentUpon>201804061419078_user_role.cs</DependentUpon>
+    </Compile>
     <Compile Include="Repository.cs" />
     <Compile Include="Migrations\201803190702018_FirstInit.cs" />
     <Compile Include="Migrations\201803190702018_FirstInit.Designer.cs">
@@ -155,6 +159,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803221217241_AudienceIsActivePropertyAdded.resx">
       <DependentUpon>201803221217241_AudienceIsActivePropertyAdded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804061419078_user_role.resx">
+      <DependentUpon>201804061419078_user_role.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\MessageResources.ru.resx">
       <Generator>ResXFileCodeGenerator</Generator>

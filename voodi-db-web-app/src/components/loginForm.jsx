@@ -10,12 +10,8 @@ import config from '../app.config.json';
 import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
 import { LinearProgress  } from 'material-ui/Progress';
-import IconButton from 'material-ui/IconButton';
-import Icon from 'material-ui/Icon';
 import Dialog, {
-    DialogActions,
     DialogContent,
-    DialogContentText,
     DialogTitle,
     withMobileDialog,
   } from 'material-ui/Dialog';

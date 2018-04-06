@@ -26,7 +26,7 @@ namespace VooDiDb.Services.Core.MappingExtensions {
                 IsDeleted = !dto.IsActive,
                 Name = dto.Name,
                 PostId = dto.PostId,
-                Role = UserRolesEnum.User,
+                Role = dto.Role,
                 SortOrder = dto.SortOrder,
                 RowVersion = dto.RowVersion
             };
@@ -42,6 +42,8 @@ namespace VooDiDb.Services.Core.MappingExtensions {
         public static User MapToUser(this UserRegistrationDTO dto) {
             return new User {
                 Login = dto.Login,
+                Name =  dto.Name,
+                FullName = dto.FullName,
                 Password = string.IsNullOrEmpty(dto.Password) ? string.Empty : Security.GetMd5HashString(dto.Password),
                 DepartmentId = dto.DepartmentId,
                 PostId = dto.PostId,
