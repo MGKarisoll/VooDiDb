@@ -7,12 +7,8 @@ export const Authorization = (allowedRoles, redirectPath) =>
     (WrappedComponent) => {
         class WithAuthorization extends React.Component {
             render() {                          
-                const userHasAllowedRole = allowedRoles.indexOf(this.props.user.role) > -1;
-                const userLoggedIn = this.props.user.isLogged;
-                console.log(WrappedComponent);
-                console.log(this.props.user);
-                console.log('userHasAllowedRole', userHasAllowedRole);
-                console.log('userLoggedIn', userLoggedIn);
+                let userHasAllowedRole = allowedRoles.indexOf(this.props.user.role) > -1;
+                let userLoggedIn = this.props.user.isLogged;
 
                 if(userLoggedIn) {
                     if (userHasAllowedRole) {

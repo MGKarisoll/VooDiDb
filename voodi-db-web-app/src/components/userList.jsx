@@ -99,10 +99,8 @@ class UserList extends React.Component {
 
     handleToggle = async data => {
         data.IsActive = !data.IsActive;
-        var response = await Request.put(`/api/users/${data.Id}`, data);
+        await Request.put(`/api/users/${data.Id}`, data);
         this.getUsers();
-        // var response = await Request.put(`/api/users/${data.Id}`, data);
-        // this.getUsers();        
     }
     
     render() {
@@ -120,7 +118,7 @@ class UserList extends React.Component {
                 flexDirectiom: 'column',
                 verticalAlign: 'middle',
                 backgroundColor: '#e4e4e4',
-                minHeight: '200px'
+                height: '200px'
             },
             refreshListButtonContainer: {
                 position: 'relative',

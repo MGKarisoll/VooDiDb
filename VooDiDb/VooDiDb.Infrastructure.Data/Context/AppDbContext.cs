@@ -5,12 +5,9 @@ using VooDiDb.Infrastructure.Data.Scheme.Interfaces;
 
 namespace VooDiDb.Infrastructure.Data.Context
 {
-    public class AppDbContext : DbContext
-    {
-        public AppDbContext() : base("AppDbConnectionString") { }
-        public AppDbContext(string connectionString) : base(connectionString)
-        {
-        }
+    public class AppDbContext : DbContext {
+        private static readonly string s_connectionString = ConfigurationManager.ConnectionStrings["AppDbConnectionString"].ConnectionString;
+        public AppDbContext() : base(s_connectionString) { }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

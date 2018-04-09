@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { FormattedMessage } from 'react-intl'
 
 import TokenInfo from '../models/tokenInfo';
 import request from '../services/request';
@@ -133,7 +134,9 @@ class DepartmantSelect extends React.Component {
         }
         return(
             <FormControl className={classes.formControl} fullWidth disabled={disabled} >
-                <InputLabel htmlFor="age-simple">Department</InputLabel>
+                <InputLabel htmlFor="age-simple">
+                    <FormattedMessage id="department" defaultMessage="Department" />
+                </InputLabel>
                 <Select
                     value={this.state.value}
                     onChange={this.handleChange}

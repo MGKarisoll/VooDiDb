@@ -12,9 +12,7 @@ class TokenInfo {
             this.post = jsonObject.Post ? jsonObject.Post : 'Lorem ipsum dolor';
             this.role = jsonObject.Role;
 
-            console.log(this);
         } catch(e) {
-            console.log(e);
             this.expiresIn = new Date();
             this.userName = '';
             this.department = '';
@@ -24,8 +22,7 @@ class TokenInfo {
     }
 
     get isLogged() {
-        var result = this.expiresIn > new Date();
-        return result;
+        return this.expiresIn > new Date();
     }
 }
 

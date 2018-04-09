@@ -1,4 +1,5 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import Request from '../services/request';
 
@@ -23,8 +24,6 @@ class PostSelect extends React.Component {
             postId: this.props.value,
             posts: []
         }
-
-        console.log(props);
 
         this.value = this.props.value;
     }
@@ -54,7 +53,9 @@ class PostSelect extends React.Component {
 
         return (
             <FormControl className={classes.root} fullWidth disabled={disabled}>
-                <InputLabel htmlFor="user-form-post">Post</InputLabel>
+                <InputLabel htmlFor="user-form-post">
+                    <FormattedMessage id="post" defaultMessage="Post" />
+                </InputLabel>
                 <Select value={postId}
                         onChange={this.handleChange}
                         inputProps={{
