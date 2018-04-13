@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using VooDiDb.Domain.Core;
 using VooDiDb.Domain.Interfaces;
@@ -9,12 +8,12 @@ using VooDiDb.Services.Interfaces;
 
 namespace VooDiDb.Infrastructure.Business {
     public class DepartmentService : IDepartmentService {
-        private readonly IRepository<Department> departmentRepository;
-        private readonly IRepository<User> userRepository;
+        private readonly IRepository<Department> m_departmentRepository;
+        private readonly IRepository<User> m_userRepository;
 
         public DepartmentService(IRepository<Department> departmentRepository, IRepository<User> userRepository) {
-            this.departmentRepository = departmentRepository;
-            this.userRepository = userRepository;
+            this.m_departmentRepository = departmentRepository;
+            this.m_userRepository = userRepository;
         }
 
         public object GetService(Type serviceType) {
@@ -22,13 +21,39 @@ namespace VooDiDb.Infrastructure.Business {
         }
 
         public DepartmentDTO GetById(long id, string login) {
-            return this.departmentRepository.FindById(id)?.MapToDepartmentDTO();
+            return this.m_departmentRepository
+                       .FindById(id)?
+                       .MapToDepartmentDTO();
         }
 
-        public IEnumerable<DepartmentDTO> GetByParentId(long? id, string login) {
-            return this.departmentRepository.GetAll(x => x.ParentId == id).ToList().Select(x => x.MapToDepartmentDTO());
+        public IQueryable<DepartmentDTO> GetByParentId(long? id, string login) {
+            return this.m_departmentRepository
+                       .GetAll(x => x.ParentId == id)
+                       .Select(entity => new DepartmentDTO {
+                           Id = entity.Id,
+                           ParentId = entity.ParentId,
+                           FullName = entity.FullName,
+                           Name = entity.FullName,
+                           IsActive = !entity.IsDeleted,
+                           SortOrder = entity.SortOrder,
+                           RowVersion = entity.RowVersion
+                       });
         }
 
+        public IQueryable<DepartmentDTO> GetAll(string login) {
+            return this.m_departmentRepository
+                       .GetAll(x => true)
+                       .Select(entity => new DepartmentDTO {
+                           Id = entity.Id,
+                           ParentId = entity.ParentId,
+                           FullName = entity.FullName,
+                           Name = entity.FullName,
+                           IsActive = !entity.IsDeleted,
+                           SortOrder = entity.SortOrder,
+                           RowVersion = entity.RowVersion
+                       })
+                       .OrderBy(x => x.Id);
+        }
         public DepartmentDTO Create(DepartmentDTO item, string login) {
             throw new NotImplementedException();
         }

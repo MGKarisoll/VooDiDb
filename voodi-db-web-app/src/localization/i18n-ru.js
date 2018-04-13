@@ -19,7 +19,11 @@ const i18nRu = {
       "Name": "Имя",
       "IsActive": "Активен",
       "RowVersion": "Версия записи",
-      "SortOrder": "Порядок"
+      "SortOrder": "Порядок",
+      "FullName": "Ф.И.О.",
+      "PostId": "Должность",
+      "Login": "Логин",
+      "DepartmentId": "Подразделение"
     },
     pluralRuleFunction: function() { return ""; }
 };

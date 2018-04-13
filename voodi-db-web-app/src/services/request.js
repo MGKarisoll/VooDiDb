@@ -8,7 +8,7 @@ const host = config.server.host;
 class Request {
     
 
-    static async get(url) {  
+    static async get(url, options) {  
         let requestOptions = {
             headers: {
                 'Accept': 'application/json',
@@ -16,6 +16,15 @@ class Request {
                 'Authorization': `Bearer ${getData('token')}`
             }
         };
+
+        if(options) {
+            if(options.headers) {
+                Object.keys(options.headers).map(header => {
+                    requestOptions.headers[header] = options.headers[header];
+                    return requestOptions.headers[header];
+                });
+            }
+        }
 
         url = url.search(regexpTemplate) === -1 ? host + url : url;
         let response = await axios.get(url, requestOptions);

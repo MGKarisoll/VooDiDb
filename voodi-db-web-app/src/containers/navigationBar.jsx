@@ -8,7 +8,6 @@ import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
 import Icon from 'material-ui/Icon';
 
-import UserInfo from '../components/userInfo';
 import TokenInfo from '../models/tokenInfo';
 import AccountSigninPage from '../pages/account/signin';
 
@@ -43,7 +42,7 @@ class NavigationBar extends React.Component {
             <Typography variant="title" color="inherit" style={styles.flex}>
               {this.props.title ? this.props.title : 'Title'}
             </Typography>
-              {this.props.user.isLogged ? <UserInfo /> : <Redirect to={AccountSigninPage.GetRoutePath()} />}
+              {this.props.user.isLogged ? null : <Redirect to={AccountSigninPage.GetRoutePath()} />}
           </Toolbar>
         </AppBar>
         );

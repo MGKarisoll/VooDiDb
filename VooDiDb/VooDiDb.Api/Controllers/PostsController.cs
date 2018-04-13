@@ -63,7 +63,7 @@ namespace VooDiDb.Api.Controllers {
                 return this.Request.CreateResponse(HttpStatusCode.Created, this.service.Update(model, login));
             } catch(ArgumentException exception) when(exception.ParamName == "login") {
                 return this.Request.CreateErrorResponse(HttpStatusCode.Forbidden, exception.Message);
-            } catch {
+            } catch(Exception exception) {
                 return this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Unsupported exception.");
             }
         }

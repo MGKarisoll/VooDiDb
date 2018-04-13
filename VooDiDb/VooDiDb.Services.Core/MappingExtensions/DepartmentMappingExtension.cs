@@ -1,4 +1,6 @@
-﻿using VooDiDb.Domain.Core;
+﻿using System;
+using System.Linq;
+using VooDiDb.Domain.Core;
 
 namespace VooDiDb.Services.Core.MappingExtensions {
     public static class DepartmentMappingExtension {
@@ -11,6 +13,20 @@ namespace VooDiDb.Services.Core.MappingExtensions {
                 IsActive = !entity.IsDeleted,
                 SortOrder = entity.SortOrder,
                 RowVersion = entity.RowVersion
+            };
+        }
+
+        public static DepartmentNestedDTO MapToDepartmentNestedDTO(this Department entity) {
+            return new DepartmentNestedDTO {
+                Id = entity.Id,
+                ParentId = entity.ParentId,
+                FullName = entity.FullName,
+                Name = entity.FullName,
+                IsActive = !entity.IsDeleted,
+                SortOrder = entity.SortOrder,
+                RowVersion = entity.RowVersion,
+                Parent = entity.Parent.MapToDepartmentNestedDTO(),
+                Children = entity.Children.Select(x => x.MapToDepartmentNestedDTO()).ToList()
             };
         }
 

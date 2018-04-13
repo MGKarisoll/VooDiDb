@@ -1,187 +1,93 @@
-import axios from 'axios';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import config from '../app.config.json';
 import TokenInfo from '../models/tokenInfo';
-import UserForm from './userForm';
-import Request from '../services/request'
+import Request from '../services/request';
+import UserListItem from './userListItem';
 
-import { withTheme } from 'material-ui/styles';
-import Icon from 'material-ui/Icon';
-import { Paper, IconButton } from 'material-ui';
-import Checkbox from 'material-ui/Checkbox';
-import {List, ListItem, ListItemSecondaryAction, ListItemText } from 'material-ui';
-import { LinearProgress  } from 'material-ui/Progress';
-import Dialog from 'material-ui/Dialog';
+import { withStyles } from 'material-ui/styles';
+import Table, {
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+  } from 'material-ui/Table';
 
 class UserList extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor(params) {
+        super(params);
 
         this.state = {
-            isLoading: false,
-            users: [
-                
-            ],
-            userDialogIsOpen: false,
-            userData: null
-        }
-
-        this.getUsers = this.getUsers.bind(this);
+            loading: false,
+            list: []
+        };
     }
 
-    getUsers = () => {
-        this.setState({isLoading: true});
-        var request = {
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': 'Bearer ' + this.props.token,
-                'Content-Type': 'application/json',
-            }
-        }
-
-        var url = config.server.host + '/api/users';
+    componentWillMount = async () => {
         try {
-            axios
-                .get(url, request)
-                .then(response=>this.setState({users: response.data, isLoading: false}));
-        } catch (error) {
-            console.error(error);
-        }
-    };
+            this.setState({
+                loading: true,
+                list: []
+            });
+            const users = await Request.get('/api/users');
+            const depts = await Request.get('/api/departments', { headers: { 'X-Pagination': 'page=1;size=2' } });
+            const posts = await Request.get('/api/posts');
 
-    handleOpenUserFormDialog = (id) => {
-        if(!this.state.userDialogIsOpen) {
-            var request = {
-                headers: {
-                    'Accept': 'application/json',
-                    'Authorization': 'Bearer ' + this.props.token,
-                    'Content-Type': 'application/json',
-                }
-            };
-    
-            var url = config.server.host + '/api/users/' + id;
-            try {
-                axios
-                    .get(url, request)
-                    .then(response => {
-                        this.setState({
-                            userDialogIsOpen: true,
-                            userData: response.data
-                        });
-                    });
-            } catch(exception) {
-                console.log(exception);
-            }        
+            this.setState({
+                loading: false,
+                posts: posts,
+                depts: depts,
+                list: [...users.map(user => {
+                    user.Post = posts.find(x=>x.Id === user.PostId);
+                    user.Department = depts.find(x=>x.Id === user.DepartmentId);
+                    return user;
+                })]
+            });
+
+        } catch(error) {
+            this.setState({
+                loading: false
+            });
         }
     }
 
-    handleCloseUserFormDialog = (e) => {
-        this.setState({
-            userDialogIsOpen: false
-        });
-    }
-
-    updateUserDataInList = (data) => {
-        var newUsers = this.state.users.map(function(item) {
-            if(item.Id !== data.Id) return item;
-            return data;
-        });
-        this.setState({
-            users: newUsers
-        });
-    }
-
-    componentDidMount() {
-        this.getUsers();
-    }
-
-    handleToggle = async data => {
-        data.IsActive = !data.IsActive;
-        await Request.put(`/api/users/${data.Id}`, data);
-        this.getUsers();
-    }
-    
     render() {
-        const style = {
-            toolbar: {
-                height: "48px",
-                backgroundColor: this.props.theme.palette.primary.light,
-                position: "relative",
-                alignItems: "flex-end",
-                display: "flex",
-                flexDirection: "row-reverse",
-            },
-            container: {
-                display: 'flex',
-                flexDirectiom: 'column',
-                verticalAlign: 'middle',
-                backgroundColor: '#e4e4e4',
-                height: '200px'
-            },
-            refreshListButtonContainer: {
-                position: 'relative',
-                display: this.state.users.length > 0 ? 'initial' : 'none'
-            },
-            addUserButtonContainer: {
-                position: 'absolute',
-                bottom: '10px',
-                right: '10px'
-            }
-        }
-
+        const { list } = this.state;
         return(
-            <div>
-                <Paper>
-                    <div style={style.toolbar}>
-                        <IconButton onClick={e => this.handleOpenUserFormDialog(0)}>
-                            <Icon>add</Icon>
-                        </IconButton>
-                        <IconButton onClick={this.getUsers}>
-                            <Icon>refresh</Icon>
-                        </IconButton>
-                    </div>
-                    <div style={{backgroundColor: style.toolbar.backgroundColor}}>
-                        <LinearProgress style={{backgroundColor: style.toolbar.backgroundColor, visibility: this.state.isLoading ? "visible": "hidden"}} />
-                    </div>
-                    <div style={style.container}>
-                        <List style={{width: '100%', maxHeight: '240px', overflowY: 'auto'}}>
-                            {
-                                this.state.users.map((item,key) => {
-                                        return (
-                                            <ListItem key={key} button onClick={ (e) => this.handleOpenUserFormDialog(item.Id)} >
-                                                <ListItemText primary={item.FullName} />
-                                                <ListItemSecondaryAction>
-                                                    <Checkbox disabled={item.Role === "Administrator"}
-                                                        onChange={(e) => this.handleToggle(item)}
-                                                        checked={item.IsActive}
-                                                    />
-                                                </ListItemSecondaryAction>
-                                            </ListItem>
-                                        );
-                                })
-                            }
-                        </List>
-                    </div>
-                </Paper>   
-                <Dialog
-                    fullScreen
-                    open={this.state.userDialogIsOpen}
-                    onClose={this.handleCloseUserFormDialog}
-                    aria-labelledby="form-dialog-title"
-                >  
-                    <UserForm userData={this.state.userData} closeCallback={this.handleCloseUserFormDialog} saveCallback={this.updateUserDataInList} />
-                </Dialog>
-            </div>
-            
+            <Table>
+                <TableHead>
+                    <TableRow>
+                        <TableCell />
+                        <TableCell>
+                            Name
+                        </TableCell>
+                        <TableCell>
+                            Department
+                        </TableCell>
+                        <TableCell>
+                            Post
+                        </TableCell>
+                        <TableCell />
+                    </TableRow>
+                </TableHead>
+                {
+                    list
+                    ?   <TableBody>
+                        {
+                            list.map((item, key) => (
+                                <UserListItem key={key} item={item} />
+                            ))
+                        }
+                        </TableBody>
+                    : null
+                }
+            </Table>
         );
     }
 }
 
-const mapStateToProps = (state) => ({
-    token: state.token,
+const mapStateToProps = state => ({
     user: new TokenInfo(state.token)
 });
 
-export default connect(mapStateToProps)(withTheme()(UserList));
+export default connect(mapStateToProps)(withStyles()(UserList));
