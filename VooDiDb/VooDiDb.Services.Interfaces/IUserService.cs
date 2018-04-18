@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using VooDiDb.Services.Core;
 
 namespace VooDiDb.Services.Interfaces
@@ -9,7 +10,7 @@ namespace VooDiDb.Services.Interfaces
         UserDTO Create(UserRegistrationDTO userRegistrationDTO, string login);
         UserDTO LogIn(UserLoginDTO loginModel);
 
-        ICollection<UserDTO> Get(string login);
+        IQueryable<UserDTO> Get(string login);
 
         UserDTO Get(long id, string login);
 

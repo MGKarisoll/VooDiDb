@@ -48,6 +48,7 @@
     <Compile Include="MappingExtensions\DepartmentMappingExtension.cs" />
     <Compile Include="MappingExtensions\PostMappingExtension.cs" />
     <Compile Include="MappingExtensions\UserMappingExtension.cs" />
+    <Compile Include="PagedListDTO.cs" />
     <Compile Include="PostDTO.cs" />
     <Compile Include="UserDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

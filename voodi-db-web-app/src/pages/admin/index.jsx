@@ -24,7 +24,7 @@ class AdminIndexPage extends React.Component {
                 <div>
                     <NavigationBar {...this.props} title={<FormattedMessage id="admin.title" defaultMessage="Administrator" />} />
                     <Grid container spacing={0}  >
-                        <Grid item xl={6} xs={6} sm={12} style={{ padding: '4px' }}>
+                        <Grid item xl={6} xs={12} sm={12} style={{ padding: '4px' }}>
                             <UserList />
                         </Grid>
                         <Grid item xl={6} xs={6} sm={12} style={{ padding: '4px' }} >

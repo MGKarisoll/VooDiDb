@@ -152,8 +152,10 @@
     <Compile Include="Controllers\ProtectedController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Extensions\ClaimsIdentityExtensions.cs" />
+    <Compile Include="Extensions\HttpRequestExtension.cs" />
     <Compile Include="Extensions\ValidationServiceExtension.cs" />
     <Compile Include="Filters\ExtendedUserClaimsAuthorizeAttribute.cs" />
+    <Compile Include="Filters\PaginationAttribute.cs" />
     <Compile Include="WindsorConfig\AppWindsorInstaller.cs" />
     <Compile Include="WindsorConfig\WindsorDependencyScope.cs" />
     <Compile Include="Global.asax.cs">

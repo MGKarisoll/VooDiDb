@@ -8,7 +8,7 @@ const host = config.server.host;
 class Request {
     
 
-    static async get(url, options) {  
+    static async get(url, options, responseHeaders) {  
         let requestOptions = {
             headers: {
                 'Accept': 'application/json',

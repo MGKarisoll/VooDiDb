@@ -16,20 +16,6 @@ namespace VooDiDb.Services.Core.MappingExtensions {
             };
         }
 
-        public static DepartmentNestedDTO MapToDepartmentNestedDTO(this Department entity) {
-            return new DepartmentNestedDTO {
-                Id = entity.Id,
-                ParentId = entity.ParentId,
-                FullName = entity.FullName,
-                Name = entity.FullName,
-                IsActive = !entity.IsDeleted,
-                SortOrder = entity.SortOrder,
-                RowVersion = entity.RowVersion,
-                Parent = entity.Parent.MapToDepartmentNestedDTO(),
-                Children = entity.Children.Select(x => x.MapToDepartmentNestedDTO()).ToList()
-            };
-        }
-
         public static Department MapToDepartment(this DepartmentDTO dto) {
             return new Department {
                 Id = dto.Id,
