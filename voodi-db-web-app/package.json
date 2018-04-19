@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "autosuggest-highlight": "^3.1.1",
     "axios": "^0.18.0",
     "base-64": "^0.1.0",
     "jose-jwe-jws": "^0.1.6",
@@ -11,6 +12,7 @@
     "material-ui": "^1.0.0-beta.39",
     "prop-types": "^15.5.10",
     "react": "^16.2.0",
+    "react-autosuggest": "^9.3.4",
     "react-dom": "^16.2.0",
     "react-intl": "^2.4.0",
     "react-redux": "^5.0.7",

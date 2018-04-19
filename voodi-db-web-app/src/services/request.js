@@ -1,6 +1,6 @@
 import axios from 'axios';
 import config from '../app.config.json';
-import {getData} from '../storage/browserStorage'
+import { getData } from '../storage/browserStorage'
 
 const regexpTemplate = '^(http|https)://';
 const host = config.server.host;

@@ -1,15 +1,15 @@
-import React from 'react';
-import {connect} from 'react-redux';
-import {Redirect} from 'react-router-dom';
+import {connect}          from 'react-redux';
+import React              from 'react';
+import {Redirect}         from 'react-router-dom';
 
-import AppBar from 'material-ui/AppBar';
-import Toolbar from 'material-ui/Toolbar';
-import Typography from 'material-ui/Typography';
-import IconButton from 'material-ui/IconButton';
-import Icon from 'material-ui/Icon';
+import AppBar             from 'material-ui/AppBar';
+import Icon               from 'material-ui/Icon';
+import IconButton         from 'material-ui/IconButton';
+import Toolbar            from 'material-ui/Toolbar';
+import Typography         from 'material-ui/Typography';
 
-import TokenInfo from '../models/tokenInfo';
-import AccountSigninPage from '../pages/account/signin';
+import TokenInfo          from '../models/tokenInfo';
+import AccountSigninPage  from '../pages/account/signin';
 
 
 class NavigationBar extends React.Component {

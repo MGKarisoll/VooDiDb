@@ -1,33 +1,28 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import { connect }          from 'react-redux';
+import React                from 'react';
 
-import TokenInfo from '../models/tokenInfo';
-import Request from '../services/request';
-import Guid from '../services/guid';
-import UserListItem from './userListItem';
+import Guid                 from '../services/guid';
+import TokenInfo            from '../models/tokenInfo';
+import Request              from '../services/request';
+import UserListItem         from './userListItem';
 
-import { withStyles } from 'material-ui/styles';
-import Table, {
-    TableBody,
-    TableCell,
-    TableHead,
-    TableRow,
-} from 'material-ui/Table';
-import { Checkbox, Chip } from 'material-ui';
-import IconButton from 'material-ui/IconButton';
-import Icon from 'material-ui/Icon';
-import Dialog from 'material-ui/Dialog';
-import AppBar from 'material-ui/AppBar';
-import Toolbar from 'material-ui/Toolbar';
-import Typography from 'material-ui/Typography';
-import Slide from 'material-ui/transitions/Slide';
-import Button from 'material-ui/Button';
-import TextField from 'material-ui/TextField';
-import { InputLabel } from 'material-ui/Input';
-import { MenuItem } from 'material-ui/Menu';
-import { FormControl } from 'material-ui/Form';
-import Select from 'material-ui/Select';
-import Grid from 'material-ui/Grid';
+import AppBar               from 'material-ui/AppBar';
+import Button               from 'material-ui/Button';
+import { CircularProgress } from 'material-ui/Progress';
+import { Chip }             from 'material-ui';
+import Dialog               from 'material-ui/Dialog';
+import { FormControl }      from 'material-ui/Form';
+import Grid                 from 'material-ui/Grid';
+import Icon                 from 'material-ui/Icon';
+import IconButton           from 'material-ui/IconButton';
+import { InputLabel }       from 'material-ui/Input';
+import { MenuItem }         from 'material-ui/Menu';
+import Select               from 'material-ui/Select';
+import Slide                from 'material-ui/transitions/Slide';
+import TextField            from 'material-ui/TextField';
+import Toolbar              from 'material-ui/Toolbar';
+import Typography           from 'material-ui/Typography';
+import { withStyles }       from 'material-ui/styles';
 
 function styles(theme) {
     return {
@@ -92,9 +87,10 @@ class UserList extends React.Component {
                     "X-Pagination": `page=${page};size=${size}`
                 }
             });
+
             const users = list.Items;
             page = list.Page;
-            const depts = await Request.get('/api/departments');
+            const depts = (await Request.get('/api/departments')).Items;
             const posts = await Request.get('/api/posts');
 
             this.setState({
@@ -118,7 +114,7 @@ class UserList extends React.Component {
     }
 
     componentWillMount = async () => {
-        await this.loadData(this.state.page, this.state.size);
+        await this.loadData(0, this.state.size);
     }
 
     handleOpenEditDialog = async event => {
@@ -222,38 +218,23 @@ class UserList extends React.Component {
     }
 
     nextPage = async event => {
-        if(this.state.page + 1 <= this.state.maxPages) {
+        if (this.state.page + 1 <= this.state.maxPages) {
             var page = this.state.page + 1;
             await this.loadData(page, this.state.size);
         }
     }
 
     prevPage = async event => {
-        if(this.state.page > 0) {
+        if (this.state.page > 0) {
             var page = this.state.page - 1;
             await this.loadData(page, this.state.size);
         }
     }
 
-    loopUserListItem = list => {
-        // let result = [];
-        // for(let i = 0; i < list.length; i++) {
-        //     console.log(list[i]);
-        //     if(list[i]) {
-        //         result.push(list[i]);
-        //     } else {
-        //         result.push(<Grid item xs={12}><p>as</p></Grid>);
-        //     }
-        // }
-
-        // return result;
-        return list.map((item, key) => <UserListItem key={key} item={item} />)
-    }
-
     render() {
         const { classes } = this.props;
         const { list } = this.state;
-        const { item, form, departments, posts } = this.state;
+        const { form, departments, posts } = this.state;
         let scrumbs = undefined;
         if (departments && departments[0]) {
             scrumbs = [departments[0]];
@@ -287,11 +268,9 @@ class UserList extends React.Component {
                             <IconButton onClick={this.handleOpenEditDialog}>
                                 <Icon>add</Icon>
                             </IconButton>
-                            <IconButton>
+                            <IconButton onClick={e => this.loadData(this.state.page, this.state.size)}>
                                 <Icon>refresh</Icon>
                             </IconButton>
-
-
                             <Dialog
                                 fullScreen
                                 open={this.state.createDialogIsOpen}
@@ -318,7 +297,6 @@ class UserList extends React.Component {
                                         {
                                             form && <form>
                                                 <input id={`form-id-${guid}`} name={'Id'} value={form.Id} type="hidden" />
-                                                {/* <input id={`form-login-${guid}`} name={'Login'} value={form.Login} type="hidden" /> */}
                                                 <input id={`form-role-${guid}`} name={'Role'} value={form.Role} type="hidden" />
                                                 <FormControl className={classes.formControl} fullWidth>
                                                     <TextField
@@ -438,26 +416,36 @@ class UserList extends React.Component {
                     </Grid>
                 </Grid>
                 <Grid item xs={12}>
-                    <Grid container style={{height: this.state.size * 48}}>
-                    {
-                        // list && list.map((item, key) => <UserListItem key={key} item={item} />)                        
-                        list && this.loopUserListItem(list)
-                    }
+                    <Grid container style={{ height: this.state.size * 48 }}>
+                        {
+                            list && list.map((item, key) => <UserListItem key={key} item={item} />)
+                        }
                     </Grid>
                 </Grid>
                 <Grid item xs={12}>
                     <Grid container>
                         <Grid item xs={10} />
                         <Grid item xs={2} className={classes.right}>
+                            <IconButton onClick={e => this.loadData(this.state.maxPages, this.state.size)}>
+                                <Icon>last_page</Icon>
+                            </IconButton>
                             <IconButton onClick={this.nextPage}>
                                 <Icon>chevron_right</Icon>
                             </IconButton>
-                            <IconButton style={{fontSize: 15}}>
-                                {(this.state.page + 1)}
+                            <IconButton style={{ fontSize: 15 }}>
+                                {
+                                    !this.state.loading
+                                        ? (this.state.page + 1)
+                                        : <CircularProgress className={classes.progress} size={25} color="secondary" />
+
+                                }
                             </IconButton>
                             <IconButton onClick={this.prevPage}>
                                 <Icon>chevron_left</Icon>
-                            </IconButton>                            
+                            </IconButton>
+                            <IconButton onClick={e => this.loadData(0, this.state.size)}>
+                                <Icon>first_page</Icon>
+                            </IconButton>
                         </Grid>
                     </Grid>
                 </Grid>

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -20,13 +21,14 @@ namespace VooDiDb.Api.Controllers {
         [Pagination]
         public HttpResponseMessage Get() {
             if(this.Request.GetPagination() is Pagination pagination) {
-                var list = this.m_departmentService.GetAll(string.Empty).Skip(pagination.Page * pagination.Size).Take(pagination.Size).ToList();
-                return this.Request.CreateResponse(HttpStatusCode.OK, list);
+                var all = this.m_departmentService.GetAll(string.Empty);
+                var list = all.Skip(pagination.Page * pagination.Size).Take(pagination.Size).ToList();
+                return this.Request.CreateResponse(HttpStatusCode.OK, new PagedList<DepartmentDTO>(pagination.Page, all.LongCount() / pagination.Size, list));
             } else {
                 var list = this.m_departmentService.GetAll(string.Empty);
                 return list == null
-                    ? this.Request.CreateResponse(HttpStatusCode.OK, new DepartmentDTO[0])
-                    : this.Request.CreateResponse(HttpStatusCode.OK, list);
+                    ? this.Request.CreateResponse(HttpStatusCode.OK, new PagedList<DepartmentDTO>(0, 1, new DepartmentDTO[0]))
+                    : this.Request.CreateResponse(HttpStatusCode.OK, new PagedList<DepartmentDTO>(0, 1, list));
             }
         }
 

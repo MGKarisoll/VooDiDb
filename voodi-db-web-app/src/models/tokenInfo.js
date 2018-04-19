@@ -1,4 +1,4 @@
-import { KJUR, b64utoutf8 } from 'jsrsasign'
+import { b64utoutf8, KJUR } from 'jsrsasign'
 
 class TokenInfo {
     constructor(token) {

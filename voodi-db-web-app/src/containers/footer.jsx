@@ -1,6 +1,6 @@
-import React from 'react';
-import { connect } from 'react-redux'
-import { changeLang } from '../actions/langActions.js';
+import { connect }      from 'react-redux'
+import { changeLang }   from '../actions/langActions.js';
+import React            from 'react';
 
 class Footer extends React.Component {
 

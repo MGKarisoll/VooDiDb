@@ -1,28 +1,24 @@
-import React from 'react';
+import React                from 'react';
 
-import Request from '../services/request';
-import Guid from '../services/guid';
+import Request              from '../services/request';
+import Guid                 from '../services/guid';
 
-import { withStyles } from 'material-ui/styles';
-import {
-    TableCell,
-    TableRow,
-} from 'material-ui/Table';
-import { Checkbox, Chip } from 'material-ui';
-import IconButton from 'material-ui/IconButton';
-import Icon from 'material-ui/Icon';
-import Dialog from 'material-ui/Dialog';
-import AppBar from 'material-ui/AppBar';
-import Toolbar from 'material-ui/Toolbar';
-import Typography from 'material-ui/Typography';
-import Slide from 'material-ui/transitions/Slide';
-import Button from 'material-ui/Button';
-import TextField from 'material-ui/TextField';
-import { InputLabel } from 'material-ui/Input';
-import { MenuItem } from 'material-ui/Menu';
-import { FormControl } from 'material-ui/Form';
-import Select from 'material-ui/Select';
-import Grid from 'material-ui/Grid';
+import AppBar               from 'material-ui/AppBar';
+import Button               from 'material-ui/Button';
+import { Chip }             from 'material-ui';
+import Dialog               from 'material-ui/Dialog';
+import { FormControl }      from 'material-ui/Form';
+import Grid                 from 'material-ui/Grid';
+import IconButton           from 'material-ui/IconButton';
+import Icon                 from 'material-ui/Icon';
+import { InputLabel }       from 'material-ui/Input';
+import { MenuItem }         from 'material-ui/Menu';
+import TextField            from 'material-ui/TextField';
+import Toolbar              from 'material-ui/Toolbar';
+import Typography           from 'material-ui/Typography';
+import Slide                from 'material-ui/transitions/Slide';
+import Select               from 'material-ui/Select';
+import { withStyles }       from 'material-ui/styles';
 
 function Transition(props) {
     return <Slide direction="up" {...props} />;
@@ -187,7 +183,7 @@ class UserListItem extends React.Component {
                 <Grid container spacing={8}>
                     <Grid item xs={3}>
                         <Typography noWrap className={classes.middle}>
-                                {item.Name}
+                            {item.Name}
                         </Typography>
                     </Grid>
                     <Grid item xs={4} >
