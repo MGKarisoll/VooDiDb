@@ -44,5 +44,18 @@ namespace VooDiDb.Api.Controllers {
             if(list == null) return this.Request.CreateResponse(HttpStatusCode.OK, new DepartmentDTO[0]);
             return this.Request.CreateResponse(HttpStatusCode.OK, list);
         }
+
+        [HttpPost]
+        public HttpResponseMessage Post(DepartmentDTO value) {
+            if (!this.User.TryClaimsUserIdentity(out var login))
+                return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, "User Identity is invalid.");
+            var any = this.m_departmentService.GetAll(login).Any(x => x.Name == value.Name || x.FullName == value.FullName);
+            if(any) {
+                return this.Request.CreateResponse(HttpStatusCode.BadRequest, "Entry is");
+            }
+
+            var data = this.m_departmentService.Create(value, login);
+            return this.Request.CreateResponse(HttpStatusCode.OK, data);
+        }
     }
 }

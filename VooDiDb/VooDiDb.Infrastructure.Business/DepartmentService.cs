@@ -55,7 +55,16 @@ namespace VooDiDb.Infrastructure.Business {
                        .OrderBy(x => x.Id);
         }
         public DepartmentDTO Create(DepartmentDTO item, string login) {
-            throw new NotImplementedException();
+            var data = this.m_departmentRepository.Insert(new Department {
+                Id = item.Id,
+                Name = item.Name,
+                FullName = item.FullName,
+                IsDeleted = !item.IsActive,
+                ParentId = item.ParentId,
+                RowVersion = item.RowVersion,
+                SortOrder = item.SortOrder
+            }).MapToDepartmentDTO();
+            return data;
         }
 
         public DepartmentDTO Update(DepartmentDTO item, string login) {

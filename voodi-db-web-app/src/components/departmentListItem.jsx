@@ -1,17 +1,20 @@
-import React            from 'react';
+import React                    from 'react';
 
-import Guid             from '../services/guid';
+import Guid                     from '../services/guid';
 
-import AppBar           from 'material-ui/AppBar';
-import Button           from 'material-ui/Button';
-import Dialog           from 'material-ui/Dialog';
-import Grid             from 'material-ui/Grid';
-import Icon             from 'material-ui/Icon';
-import IconButton       from 'material-ui/IconButton';
-import Slide            from 'material-ui/transitions/Slide';
-import Toolbar          from 'material-ui/Toolbar';
-import Typography       from 'material-ui/Typography';
-import { withStyles }   from 'material-ui/styles';
+import AppBar                   from 'material-ui/AppBar';
+import Button                   from 'material-ui/Button';
+import Dialog                   from 'material-ui/Dialog';
+import Grid                     from 'material-ui/Grid';
+import Icon                     from 'material-ui/Icon';
+import IconButton               from 'material-ui/IconButton';
+import Slide                    from 'material-ui/transitions/Slide';
+import TextField                from 'material-ui/TextField';
+import Toolbar                  from 'material-ui/Toolbar';
+import Typography               from 'material-ui/Typography';
+import { withStyles }           from 'material-ui/styles';
+
+import IntegrationAutosuggest   from './IntegrationAutosuggest';
 
 const styles = {
     appBar: {
@@ -37,6 +40,9 @@ const styles = {
     right: {
         display: 'flex',
         flexDirection: 'row-reverse'
+    },
+    typeItem: {
+        height: '48px'
     }
 };
 
@@ -49,48 +55,44 @@ class DepartmentListItem extends React.Component {
         super(params);
 
         this.state = {
-            editDialogIsOpen: false,
-            item: params.item,
-            form: null
+            open: false,
+            item: params.item
         }
     }
 
-    handleOpenEditDialog = async event => {
+    toggleDialog = async () => {
+        const { open, form, item } = this.state;
         this.setState({
-            form: JSON.parse(JSON.stringify(this.state.item)),
-            editDialogIsOpen: true
+            open: !open
         });
     }
 
-    handleCloseEditDialog = event => {
+    componentWillReceiveProps = props => {
+        console.log('componentWillReceiveProps');
         this.setState({
-            editDialogIsOpen: false
+            item: props.item
         });
     }
 
-    handleSaveEditDialog = async event => {
-        try {
-            this.setState({
-                loading: true
-            });
-
-            this.setState({
-                loading: false,
-                editDialogIsOpen: false
-            });
-        } catch(error) {
-            this.setState({
-                editDialogIsOpen: false
-            });
+    getDeepDepartment = async id => {
+        const department = await Request.get(`/api/departments/${id}`);
+        const children = await Request.get(`/api/departments/${id}/children`);
+        department.Children = children.map(child => {
+            child.Parent = department;
+            return child;
+        });
+        if (department.ParentId) {
+            department.Parent = await this.getDeepDepartment(department.ParentId);
         }
+        return department;
     }
 
     render() {
         const { classes } = this.props;
-        const { item, form } = this.state;
+        const { item, open } = this.state;
         const guid = Guid.NewGuid();
         return(
-            <Grid item xs={12}>
+            <Grid item xs={12} className={classes.typeItem}>
                 <Grid container spacing={8}>
                     <Grid item xs={10}>
                         <Typography noWrap className={classes.middle}>
@@ -98,20 +100,19 @@ class DepartmentListItem extends React.Component {
                         </Typography>
                     </Grid>
                     <Grid item xs={2} className={classes.right}>
-                        <IconButton onClick={this.handleOpenEditDialog}>
+                        <IconButton onClick={this.toggleDialog}>
                             <Icon>settings</Icon>
                         </IconButton>
                         {
-                            form &&
                             <Dialog
                                 fullScreen
-                                open={this.state.editDialogIsOpen}
+                                open={open}
                                 onClose={this.handleCloseEditDialog}
                                 transition={Transition}
                             >
                                 <AppBar className={classes.appBar}>
                                     <Toolbar>
-                                        <IconButton color="inherit" onClick={this.handleCloseEditDialog} aria-label="Close">
+                                        <IconButton color="inherit" onClick={this.toggleDialog} aria-label="Close">
                                             <Icon>close</Icon>
                                         </IconButton>
                                         <Typography variant="title" color="inherit" className={classes.flex}>
@@ -125,8 +126,7 @@ class DepartmentListItem extends React.Component {
                                 <Grid container className={classes.root}>
                                     <Grid item xs={1} sm={2} md={3} lg={3} xl={3} />
                                     <Grid item xs={10} sm={8} md={6} lg={6} xl={6}>
-                                        <input id={`form-sortorder-${guid}`} type="hidden" value={form.SortOrder} name="SortOrder" />
-                                        <input id={`form-rowversion-${guid}`} type="hidden" value={form.RowVersion} name="RowVersion" />
+                                        
                                     </Grid>
                                     <Grid item xs={1} sm={2} md={3} lg={3} xl={3} />
                                 </Grid>

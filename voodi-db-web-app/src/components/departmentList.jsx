@@ -58,7 +58,8 @@ class DepartmentList extends React.Component {
             loading: false,
             maxPages: 0,
             page: 0,
-            size: 4
+            size: 4,
+            form: {}
         }
     }
 
@@ -99,15 +100,44 @@ class DepartmentList extends React.Component {
     }
 
     handleSaveCreateDialog = async event => {
-        console.log(event);
-        event.preventDefaults();
+        const form = this.state.form;
+        event.preventDefault();
         this.setState({
             createDialogIsOpen: false
         });
+        const data = {
+            Id: 0,
+            Name: form.Name,
+            FullName: form.FullName,
+            ParentId: form.ParentId ? form.ParentId : null,
+            IsActive: true,
+            SortOrder: 0,
+            RowVersion: ""
+        };
+        await Request.post('/api/departments', data);
+        await this.loadData(this.state.page, this.state.size);
     }
 
     componentDidMount = async () => {
         await this.loadData(0, this.state.size);
+    }
+
+    handleChangeInput = propName => event => {
+        const form = this.state.form;
+        form[propName] = event.target.value;
+        this.setState({
+            form: form
+        });
+    }
+
+    loopItems = list => {
+        const result = [];
+        for(let i = 0; i < this.state.size; i++) {
+            const entry = list[i];
+            if(entry) result.push(<DepartmentListItem key={i} item={entry} />);
+            else result.push(<Grid key={i} item xs={12} style={{height:48}} />);
+        }
+        return result;
     }
 
     render() {
@@ -145,7 +175,7 @@ class DepartmentList extends React.Component {
                                         <Typography variant="title" color="inherit" className={classes.flex}>
                                             NEW
                                         </Typography>
-                                        <Button color="inherit" onClick={e => { console.log(this.createForm); this.createForm.submit(); } }>
+                                        <Button color="inherit" onClick={this.handleSaveCreateDialog}>
                                             save
                                 </Button>
                                     </Toolbar>
@@ -153,13 +183,14 @@ class DepartmentList extends React.Component {
                                 <Grid container className={classes.root}>
                                     <Grid item xs={1} sm={2} md={3} lg={3} xl={3} />
                                     <Grid item xs={10} sm={8} md={6} lg={6} xl={6}>
-                                        <form ref={ e=> this.createForm = e } onSubmit={this.handleSaveCreateDialog} method="POST">
+                                        <form ref={ e=> this.createForm = e }>
                                             <TextField
                                                 fullWidth
                                                 required
                                                 id={`form-name-${guid}`}
                                                 label="Name"
                                                 className={classes.textField}
+                                                onChange={this.handleChangeInput("Name")}
                                                 margin="normal" />
 
                                             <TextField
@@ -168,11 +199,11 @@ class DepartmentList extends React.Component {
                                                 id={`form-fullname-${guid}`}
                                                 label="FullName"
                                                 className={classes.textField}
-                                                margin="normal"
-                                                onChange={e => console.log(e.target.value) } />
+                                                onChange={this.handleChangeInput("FullName")}
+                                                margin="normal" />
                                             <br/>
                                             <br/>
-                                            <IntegrationAutosuggest onChange={e => console.log(e.target.value) } />
+                                            <IntegrationAutosuggest onChange={this.handleChangeInput("ParentId")} />
                                         </form>
 
                                     </Grid>
@@ -185,7 +216,7 @@ class DepartmentList extends React.Component {
                 <Grid item xs={12}>
                     <Grid container style={{ height: this.state.size * 48 }}>
                         {
-                            list && list.map((item, key) => <DepartmentListItem key={key} item={item} />)
+                            list && this.loopItems(list)
                         }
                     </Grid>
                 </Grid>

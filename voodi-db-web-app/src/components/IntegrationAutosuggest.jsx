@@ -121,14 +121,25 @@ class IntegrationAutosuggest extends React.Component {
 
     componentDidMount = async () => {
         const response = await Request.get('/api/departments');
-        this.setState({
-            data: response.Items.map(item => ({ label: item.Name, value: item.Id }))
-        });
+        console.log(this.props.value);
+        if(this.props.value) {
+            const department = await Request.get(`/api/departments/${this.props.value}`);
+            let data = response.Items.filter(x=>x.Id !== this.props.except);
+            console.log(data);
+            this.setState({
+                value: department.Name,
+                data: data.map(item => ({ label: item.Name, value: item.Id }))
+            });
+        } else {
+            this.setState({
+                data: response.Items.map(item => ({ label: item.Name, value: item.Id }))
+            });
+        }
     }
 
     handleSuggestionsFetchRequested = ({ value }) => {
         this.setState({
-            suggestions: getSuggestions(value, this.state.data),
+            suggestions: getSuggestions(value, this.state.data.filter(x=>x.value !== this.props.except)),
         });
     };
 
