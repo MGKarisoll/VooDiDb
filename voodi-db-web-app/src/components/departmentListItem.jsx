@@ -1,7 +1,5 @@
 import React                    from 'react';
 
-import Guid                     from '../services/guid';
-
 import AppBar                   from 'material-ui/AppBar';
 import Button                   from 'material-ui/Button';
 import Dialog                   from 'material-ui/Dialog';
@@ -9,12 +7,9 @@ import Grid                     from 'material-ui/Grid';
 import Icon                     from 'material-ui/Icon';
 import IconButton               from 'material-ui/IconButton';
 import Slide                    from 'material-ui/transitions/Slide';
-import TextField                from 'material-ui/TextField';
 import Toolbar                  from 'material-ui/Toolbar';
 import Typography               from 'material-ui/Typography';
 import { withStyles }           from 'material-ui/styles';
-
-import IntegrationAutosuggest   from './IntegrationAutosuggest';
 
 const styles = {
     appBar: {
@@ -61,14 +56,13 @@ class DepartmentListItem extends React.Component {
     }
 
     toggleDialog = async () => {
-        const { open, form, item } = this.state;
+        const { open, } = this.state;
         this.setState({
             open: !open
         });
     }
 
     componentWillReceiveProps = props => {
-        console.log('componentWillReceiveProps');
         this.setState({
             item: props.item
         });
@@ -90,7 +84,6 @@ class DepartmentListItem extends React.Component {
     render() {
         const { classes } = this.props;
         const { item, open } = this.state;
-        const guid = Guid.NewGuid();
         return(
             <Grid item xs={12} className={classes.typeItem}>
                 <Grid container spacing={8}>

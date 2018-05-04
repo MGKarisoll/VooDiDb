@@ -3,6 +3,8 @@ import React                from 'react';
 import Request              from '../services/request';
 import Guid                 from '../services/guid';
 
+import DepartmentSelect     from './departmentSelect';
+
 import AppBar               from 'material-ui/AppBar';
 import Button               from 'material-ui/Button';
 import { Chip }             from 'material-ui';
@@ -19,6 +21,7 @@ import Typography           from 'material-ui/Typography';
 import Slide                from 'material-ui/transitions/Slide';
 import Select               from 'material-ui/Select';
 import { withStyles }       from 'material-ui/styles';
+
 
 function Transition(props) {
     return <Slide direction="up" {...props} />;
@@ -252,7 +255,7 @@ class UserListItem extends React.Component {
                                         </FormControl>
                                         <br />
                                         <br />
-                                        <FormControl className={classes.formControl} fullWidth>
+                                        {/* <FormControl className={classes.formControl} fullWidth>
                                             <InputLabel htmlFor={`form-department-${guid}`}>Department</InputLabel>
                                             <Select
                                                 value={form.DepartmentId}
@@ -273,7 +276,7 @@ class UserListItem extends React.Component {
                                                     scrumbs && scrumbs.map((scrumb, key) => <Chip key={key} className={classes.rooth} label={<Typography noWrap>{scrumb.Name}</Typography>} onClick={this.handleClickScrumb(scrumb.Id)} style={{ margin: '8px 4px', position: 'relative', maxWidth: '100%' }} />)
                                                 }
                                             </div>
-                                        </FormControl>
+                                        </FormControl> */}
                                         <br />
                                         <br />
                                         <FormControl className={classes.formControl} fullWidth>
@@ -311,6 +314,7 @@ class UserListItem extends React.Component {
                                         </FormControl>
                                         <input id={`form-sortorder-${guid}`} type="hidden" value={form.SortOrder} name="SortOrder" />
                                         <input id={`form-rowversion-${guid}`} type="hidden" value={form.RowVersion} name="RowVersion" />
+                                        <DepartmentSelect value={form.DepartmentId} id={`form-department-${guid}`} name="DepartmentId" onChange={this.handleChangeInput('IsActive')} />
                                     </Grid>
                                     <Grid item xs={1} sm={2} md={3} lg={3} xl={3} />
                                 </Grid>
