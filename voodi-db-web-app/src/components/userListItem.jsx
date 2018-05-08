@@ -1,26 +1,28 @@
-import React                from 'react';
+import React from 'react';
 
-import Request              from '../services/request';
-import Guid                 from '../services/guid';
+import Request from '../services/request';
+import Guid from '../services/guid';
 
-import DepartmentSelect     from './departmentSelect';
+import DepartmentSelect from './departmentSelect';
 
-import AppBar               from 'material-ui/AppBar';
-import Button               from 'material-ui/Button';
-import { Chip }             from 'material-ui';
-import Dialog               from 'material-ui/Dialog';
-import { FormControl }      from 'material-ui/Form';
-import Grid                 from 'material-ui/Grid';
-import IconButton           from 'material-ui/IconButton';
-import Icon                 from 'material-ui/Icon';
-import { InputLabel }       from 'material-ui/Input';
-import { MenuItem }         from 'material-ui/Menu';
-import TextField            from 'material-ui/TextField';
-import Toolbar              from 'material-ui/Toolbar';
-import Typography           from 'material-ui/Typography';
-import Slide                from 'material-ui/transitions/Slide';
-import Select               from 'material-ui/Select';
-import { withStyles }       from 'material-ui/styles';
+import AppBar from 'material-ui/AppBar';
+import Button from 'material-ui/Button';
+import { Chip } from 'material-ui';
+import Dialog from 'material-ui/Dialog';
+import { FormControl } from 'material-ui/Form';
+import Grid from 'material-ui/Grid';
+import IconButton from 'material-ui/IconButton';
+import Icon from 'material-ui/Icon';
+import { InputLabel } from 'material-ui/Input';
+import { MenuItem } from 'material-ui/Menu';
+import TextField from 'material-ui/TextField';
+import Toolbar from 'material-ui/Toolbar';
+import Typography from 'material-ui/Typography';
+import Slide from 'material-ui/transitions/Slide';
+import Select from 'material-ui/Select';
+import { withStyles } from 'material-ui/styles';
+
+
 
 
 function Transition(props) {
@@ -61,7 +63,7 @@ class UserListItem extends React.Component {
         this.state = {
             editDialogIsOpen: false,
             item: params.item,
-            form: null
+            form: null,
         };
     }
 
@@ -73,7 +75,11 @@ class UserListItem extends React.Component {
     }
 
     handleOpenEditDialog = async event => {
-        let form = JSON.parse(JSON.stringify(this.state.item));
+        let form = JSON.parse(JSON.stringify(this.state.item, (key, value) => {
+            if (key === "Department") return null;
+            if (key === "Post") return null;
+            return value;
+        }));
         const posts = await Request.get('/api/posts');
         if (form.DepartmentId) {
             form.Department = await this.getDeepDepartment(form.DepartmentId);
@@ -119,29 +125,9 @@ class UserListItem extends React.Component {
     handleChangeInput = name => async event => {
         let form = this.state.form;
         form[name] = event.target.value;
-        if (name === "DepartmentId") {
-            var department = await this.getDeepDepartment(event.target.value);
-            if (department) {
-                let array;
-                if (department) {
-                    array = [department, ...department.Children];
-                } else {
-                    array = [department];
-                }
-                this.setState({
-                    form: form,
-                    departments: array
-                });
-            } else {
-                this.setState({
-                    form: form
-                });
-            }
-        } else {
-            this.setState({
-                form: form
-            });
-        }
+        this.setState({
+            form: form
+        });
     }
 
     handleClickScrumb = id => async event => {
@@ -181,6 +167,7 @@ class UserListItem extends React.Component {
             }
         }
         const guid = Guid.NewGuid();
+
         return (
             <Grid item xs={12}>
                 <Grid container spacing={8}>
@@ -255,28 +242,11 @@ class UserListItem extends React.Component {
                                         </FormControl>
                                         <br />
                                         <br />
-                                        {/* <FormControl className={classes.formControl} fullWidth>
-                                            <InputLabel htmlFor={`form-department-${guid}`}>Department</InputLabel>
-                                            <Select
-                                                value={form.DepartmentId}
-                                                onChange={this.handleChangeInput("DepartmentId")}
-                                                inputProps={{
-                                                    name: 'DepartmentId',
-                                                    id: `form-department-${guid}`,
-                                                }}
-                                            >
-                                                {
-                                                    departments.map((department, key) =>
-                                                        department && <MenuItem key={key} value={department.Id}>{department.Name}</MenuItem>
-                                                    )
-                                                }
-                                            </Select>
-                                            <div style={{ margin: '0px -4px', position: 'relative' }}>
-                                                {
-                                                    scrumbs && scrumbs.map((scrumb, key) => <Chip key={key} className={classes.rooth} label={<Typography noWrap>{scrumb.Name}</Typography>} onClick={this.handleClickScrumb(scrumb.Id)} style={{ margin: '8px 4px', position: 'relative', maxWidth: '100%' }} />)
-                                                }
-                                            </div>
-                                        </FormControl> */}
+                                        <FormControl className={classes.formControl} fullWidth>
+                                            <InputLabel htmlFor={`form-department-${guid}`} shrink>Department</InputLabel>
+                                            <br />
+                                            <DepartmentSelect value={form.DepartmentId} id={`form-department-${guid}`} name="DepartmentId" onChange={this.handleChangeInput('DepartmentId')} />
+                                        </FormControl>
                                         <br />
                                         <br />
                                         <FormControl className={classes.formControl} fullWidth>
@@ -314,7 +284,6 @@ class UserListItem extends React.Component {
                                         </FormControl>
                                         <input id={`form-sortorder-${guid}`} type="hidden" value={form.SortOrder} name="SortOrder" />
                                         <input id={`form-rowversion-${guid}`} type="hidden" value={form.RowVersion} name="RowVersion" />
-                                        <DepartmentSelect value={form.DepartmentId} id={`form-department-${guid}`} name="DepartmentId" onChange={this.handleChangeInput('IsActive')} />
                                     </Grid>
                                     <Grid item xs={1} sm={2} md={3} lg={3} xl={3} />
                                 </Grid>

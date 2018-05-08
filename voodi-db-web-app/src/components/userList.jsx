@@ -1,28 +1,30 @@
-import { connect }          from 'react-redux';
-import React                from 'react';
+import { connect } from 'react-redux';
+import React from 'react';
 
-import Guid                 from '../services/guid';
-import TokenInfo            from '../models/tokenInfo';
-import Request              from '../services/request';
-import UserListItem         from './userListItem';
+import Guid from '../services/guid';
+import TokenInfo from '../models/tokenInfo';
+import Request from '../services/request';
+import UserListItem from './userListItem';
 
-import AppBar               from 'material-ui/AppBar';
-import Button               from 'material-ui/Button';
+import AppBar from 'material-ui/AppBar';
+import Button from 'material-ui/Button';
 import { CircularProgress } from 'material-ui/Progress';
-import { Chip }             from 'material-ui';
-import Dialog               from 'material-ui/Dialog';
-import { FormControl }      from 'material-ui/Form';
-import Grid                 from 'material-ui/Grid';
-import Icon                 from 'material-ui/Icon';
-import IconButton           from 'material-ui/IconButton';
-import { InputLabel }       from 'material-ui/Input';
-import { MenuItem }         from 'material-ui/Menu';
-import Select               from 'material-ui/Select';
-import Slide                from 'material-ui/transitions/Slide';
-import TextField            from 'material-ui/TextField';
-import Toolbar              from 'material-ui/Toolbar';
-import Typography           from 'material-ui/Typography';
-import { withStyles }       from 'material-ui/styles';
+import { Chip } from 'material-ui';
+import Dialog from 'material-ui/Dialog';
+import { FormControl } from 'material-ui/Form';
+import Grid from 'material-ui/Grid';
+import Icon from 'material-ui/Icon';
+import IconButton from 'material-ui/IconButton';
+import { InputLabel } from 'material-ui/Input';
+import { MenuItem } from 'material-ui/Menu';
+import Select from 'material-ui/Select';
+import Slide from 'material-ui/transitions/Slide';
+import TextField from 'material-ui/TextField';
+import Toolbar from 'material-ui/Toolbar';
+import Typography from 'material-ui/Typography';
+import { withStyles } from 'material-ui/styles';
+
+import { hubConnection } from 'signalr-no-jquery';
 
 function styles(theme) {
     return {
@@ -72,8 +74,44 @@ class UserList extends React.Component {
                 IsActive: false
             },
             departments: [],
-            posts: []
+            posts: [],
+            nick: '',
+            message: '',
+            messages: [],
+            hubConnection: null,
         };
+    }
+
+    componentDidMount = () => {
+        // const nick = window.prompt('Your name:', 'John');
+        // console.log(nick)
+
+        // const logger = { log: function(level, message) { console.log(level, message); } };
+        // const hubConnection = new HubConnection({ url: 'http://localhost:7507/chat' }, logger, { transport: ['longPolling', 'webSockets'] });
+        // console.log(hubConnection)
+
+        // this.setState({ hubConnection, nick }, () => {
+        //     this.state.hubConnection
+        //         .start()
+        //         .then(() => console.log('Connection started!'))
+        //         .catch(err => console.log('Error while establishing connection :(', err));
+
+        //     this.state.hubConnection.on('sendToAll', (nick, receivedMessage) => {
+        //         const text = `${nick}: ${receivedMessage}`;
+        //         const messages = this.state.messages.concat([text]);
+        //         this.setState({ messages });
+        //     });
+        // });
+        const connection = hubConnection('http://localhost:7507');
+        const hubProxy = connection.createHubProxy('chat');
+
+        hubProxy.on('hello', function (message) {
+            console.log(message);
+        });
+
+        connection.start({ jsonp: true })
+            .done(function () { console.log('Now connexted, connection ID=' + connection.id); })
+            .fail(function () { console.log('Could not connect'); });
     }
 
     loadData = async (page, size) => {

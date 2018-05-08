@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Web.Http;
-using System.Web.Http.Dispatcher;
-using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor;
+using Microsoft.AspNet.SignalR;
 using Microsoft.Owin;
 using Microsoft.Owin.Cors;
 using Microsoft.Owin.Security;
@@ -30,6 +29,12 @@ namespace VooDiDb.Api {
                 new { id = RouteParameter.Optional }
             );
 
+            app.Map("/chat",
+                map => {
+                    map.UseCors(CorsOptions.AllowAll);
+                    map.RunSignalR(new HubConfiguration { EnableJSONP = true });
+                });
+
             app.UseCors(CorsOptions.AllowAll);
             this.ConfigureOAuthServer(app, container);
             this.ConfigureOAuthClient(app);
@@ -46,7 +51,7 @@ namespace VooDiDb.Api {
                 TokenEndpointPath = new PathString("/oauth2/token"),
                 AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(30),
                 Provider = new CustomOAuthProvider(audienceService, userService),
-                AccessTokenFormat = new CustomJwtFormat("http://localhost:7507/", audienceService),
+                AccessTokenFormat = new CustomJwtFormat("http://localhost:7507/", audienceService)
             };
 
             // OAuth 2.0 Bearer Access Token Generation
